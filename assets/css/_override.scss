@@ -1,0 +1,45 @@
+// ==============================
+// Override Variables
+// 覆盖变量
+// ==============================
+
+.katex-html {
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 3px;
+    .base {
+      margin: 0 auto;
+    }
+}
+
+.katex-html:has(span.tag) {
+  display: flex !important;
+}
+
+.katex-display>.katex>.katex-html>.tag { 
+  position: relative !important;
+  float: right; 
+  margin-left: 0.25rem;
+}
+
+.katex .textrm {
+  font-family: var(--global-font-family) !important;
+  font-weight: var(--global-font-weight);
+  font-size: var(--global-font-size);
+  line-height: var(--global-line-height);
+}
+
+.katex>.katex-html:has(.textrm) {
+  padding: 0;
+}
+
+// no lightgallery subtitles, very ugly and sometimes I have very large captions
+.lg-sub-html {
+  visibility: hidden;
+}
+
+.lg-img-wrap {
+  padding-top: 47px;
+  padding-bottom: 80px;
+  // bottom bar imgs is 60px hoog (+10 padding top/bottom nog), top bar 47px (27 van lineheight + 10padding beide zijden)
+}

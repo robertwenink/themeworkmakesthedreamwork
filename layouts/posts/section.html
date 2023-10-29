@@ -1,0 +1,123 @@
+{{- define "title" }}
+    {{- .Params.Title | default (T .Section) | default .Section | dict "Some" | T "allSome" }} - {{ .Site.Title -}}
+{{- end -}}
+
+{{- define "content" -}}
+<script>
+    // Wait for the page to load
+    window.addEventListener("DOMContentLoaded", function () {
+        // Get all the buttons and posts
+        const buttons = document.querySelectorAll(".tag-buttons button");
+        const posts = document.querySelectorAll(".archive-item.listed");
+
+        // Add click event listener to each button
+        buttons.forEach(function (button) {
+            button.addEventListener("click", function () {
+                // Remove 'active' class from all buttons
+                buttons.forEach(function (btn) {
+                    btn.classList.remove("button_active");
+                    // btn.classList.add("");
+                });
+
+                // Add 'active' class to the clicked button
+                // button.classList.remove("");
+                button.classList.add("button_active");
+
+                if (button.textContent === "All") {
+                    // Show all posts if 'All' button is clicked
+                    posts.forEach(function (post) {
+                        post.style.display = "flex";
+                    });
+                } else {
+                    const tag = button.textContent.trim();
+
+                    // Hide all posts
+                    posts.forEach(function (post) {
+                        post.style.display = "none";
+                    });
+
+                    // Show only posts with the selected tag
+                    const id_filter = "#" + tag.replace(" ","-").toLocaleLowerCase()
+                    console.log(id_filter)
+                    const filteredPosts = document.querySelectorAll(id_filter);
+                    filteredPosts.forEach(function (post) {
+                        post.style.display = "flex";
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+    <div class="page archive">
+        {{- /* Title */ -}}
+        <h2 class="single-title animate__animated animate__pulse animate__faster">
+            Post Series
+        </h2>
+
+        {{- if .Pages -}}
+            {{- $pages := .Pages.GroupByParam "series" -}}
+            {{- range $pages -}}
+                {{ if .Key }}
+                    <div class="details admonition abstract"> <!-- Add 'open' to show opened by default -->
+                        <div class="details-summary admonition-title">
+                            <i class="icon fas fa-list-ul fa-fw" aria-hidden="true"></i>{{ .Key }}<i class="details-icon fas fa-angle-right fa-fw" aria-hidden="true"></i>
+                        </div>
+                        <div class="details-content">
+                            <div class="admonition-content">
+                                {{- range .Pages -}}
+                                    <article class="archive-item">
+                                        <a href="{{ .RelPermalink }}" class="archive-item-link">
+                                            {{- .Title | emojify -}}
+                                        </a>
+                                        <span class="archive-item-date">
+                                            {{- $.Site.Params.section.dateFormat | default "01-02" | .Date.Format -}}
+                                        </span>
+                                    </article>
+                                {{ end }}
+                            </div>
+                        </div>
+                    </div>
+                {{ end }}
+            {{ end }}
+        {{ end }}
+        <!-- Line separator -->
+        <!-- TODO -->
+        <div class="section-separator"></div>
+        
+        {{- /* Title */ -}}
+        <h2 class="single-title animate__animated animate__pulse animate__faster">
+            {{- .Params.Title | default (T .Section) | default .Section | dict "Some" | T "allSome" -}}
+        </h2>
+        <div class="tag-buttons">
+            Filter by category: 
+            <button class="button-16">All</button>
+            {{ range .Site.Taxonomies.categories }}
+            <button class="button-16">{{ .Page.Title | humanize }}</button>
+            {{ end }}
+        </div>
+        {{- /* Paginate */ -}}
+        {{- if .Pages -}}
+            {{- $pages := .Pages.GroupByDate "2006" -}}
+            {{- with .Site.Params.section.paginate | default .Site.Params.paginate -}}
+                {{- $pages = $.Paginate $pages . -}}
+            {{- else -}}
+                {{- $pages = .Paginate $pages -}}
+            {{- end -}}
+            {{- range $pages.PageGroups -}}
+                <h3 class="group-title">{{ .Key }}</h3>
+                {{- range .Pages -}}
+                    <article class="archive-item listed" id="{{ range .Params.categories }}{{- lower ( urlize . ) -}}{{ end }}">
+                        <a href="{{ .RelPermalink }}" class="archive-item-link">
+                            {{- .Title | emojify -}}
+                        </a>
+                        <span class="archive-item-date">
+                            {{- $.Site.Params.section.dateFormat | default "01-02" | .Date.Format -}}
+                        </span>
+                    </article>
+                {{- end -}}
+            {{- end -}}
+            {{- partial "paginator.html" . -}}
+        {{- end -}}
+    </div>
+{{- end -}}

@@ -1,0 +1,135 @@
+.admonition {
+    position: relative;
+    margin: 1rem 0;
+    padding: 0 .75rem 0 0;
+    border-left: .25rem solid;
+    overflow: auto;
+  
+    .admonition-title {
+      font-weight: bold;
+      margin: 0 -0.75rem 0 0;
+      padding: .25rem 1.8rem;
+      [theme=dark] & {
+        background: darken($code-background-color-dark, 6%);
+      }
+    }
+    
+    i.icon {
+      color: #00b0ff;
+      [theme=dark] & {
+        color: $global-font-color-dark !important;
+      }
+    }
+    
+    .admonition-content {
+      padding: .5rem 0;
+    }
+  
+    i.icon {
+      font-size: 0.85rem;
+      position: absolute;
+      top: .6rem;
+      left: .4rem;
+    }
+  
+    i.details-icon {
+      position: absolute;
+      top: .6rem;
+      right: .3rem;
+    }
+  
+    @each $type, $color, $background-color in $admonition-color-list {
+        &.#{$type} {
+            background-color: $background-color;
+            border-left-color: $color;
+            
+            // from _toc.scss
+            [theme=dark] & {
+                border-left-color: $global-border-color-dark;
+              }
+
+            .admonition-title {
+            border-bottom-color: $background-color;
+            background-color: opacify($background-color, 0.15);
+            }
+
+            .admonition-title:hover{
+                [theme=dark] & {
+                    color: $global-link-hover-color-dark;
+                  }
+            }
+
+            &.open .admonition-title {
+            background-color: $background-color;
+            }
+
+            i.icon {
+            color: $color;
+            }
+        }
+    }
+  
+    &:last-child {
+      margin-bottom: .75rem;
+    }
+  }
+
+.button-16 {
+  background-color: #f8f9fa;
+  border: 1px solid #f8f9fa;
+  border-radius: 4px;
+  color: #3c4043;
+  cursor: pointer;
+  font-family: arial,sans-serif;
+  font-size: 14px;
+  height: 36px;
+  line-height: 27px;
+  min-width: 54px;
+  padding: 0 16px;
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  white-space: pre;
+
+  [theme=dark] & {
+    color: $global-font-color-dark;
+    background-color: $search-background-color-dark;
+    border: 1px solid $search-background-color-dark;
+  }
+}
+
+.button-16:hover:not(.button_active) {
+  border-color: #dadce0;
+  box-shadow: rgba(0, 0, 0, .1) 0 1px 1px;
+  color: #202124;
+  [theme=dark] & {
+    color: $global-font-color-dark;
+    border-color: $global-font-color-dark;
+    }
+}
+
+.button-16:focus {
+  border-color: $global-link-hover-color;
+  outline: none;
+  [theme=dark] & {
+    border: 1px solid $global-link-hover-color;
+  }
+}
+
+.button_active{
+    border-color: $global-link-hover-color;
+    [theme=dark] & {
+        border: 1px solid $global-link-hover-color;
+    }
+}
+
+.tag-buttons {
+    float: right;
+    margin: 0 0 0 0rem; //3rem is breedte van 2023
+}
+
+.group-title {
+    // float: left;
+    display: inline-block;
+}

@@ -1,0 +1,16 @@
+#content-404 {
+  font-size: 1.0rem;
+  // line-height: 3rem;
+  @include transform(translateY(5vh));
+  margin-bottom: 5vh;
+  text-align: center;
+}
+
+#content-404 > a > h1 {
+  font-size: 3rem;
+  font-weight: bold;
+  margin: 0;
+  margin-bottom: 0.3rem;
+  margin-left: 4rem;
+  line-height: normal;
+}

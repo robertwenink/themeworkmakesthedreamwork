@@ -1,0 +1,141 @@
+// ==============================
+// Custom style
+// ==============================
+
+.section-separator {
+    border-bottom: $global-hr-line #f0f0f0;
+}
+
+.mermaid {
+    position: relative;
+    text-align: center;
+  }
+
+.mermaid > svg
+{   
+    // because mermaid assigns a height to the css that we need to override
+	height: inherit;
+}
+
+
+// for cites.
+.container {
+    overflow: hidden;
+}
+
+
+.wrap-around {
+    display: inline-block;
+    width: 100%;
+    
+    img {
+        float: left;
+        margin: 0.5rem 2.5% 2.5% 0; //0.5rem is perfect de text spacing
+    }    
+    p {
+        text-align: left;
+    }
+
+    ul {
+        overflow: auto;
+        padding-left: 1.5rem !important;
+        @media only screen and (min-width: 480px) {
+            margin-top: 0 !important;   //pakt de overlap met p niet helemaal vreemd genoeg.
+        }
+    }
+
+    a div {
+        height: max-content;
+    }
+
+}
+
+@media only screen and (max-width: 680px) {
+    #content {
+        #about_image {
+            width: 100% !important;
+        }
+    }
+}
+
+
+
+// FRONTPAGE STYLING
+#my-name-is-before, #hire-text-before{
+    display: none;
+}
+
+@media only screen and (max-width: 704px) {
+    #my-name-is-after{
+        display: none;
+    }
+    #my-name-is-before{
+        display: block;
+    }
+}
+
+@media only screen and (max-width: 590px) {
+    #hire-text-after{
+        display: none;
+    }
+    #hire-text-before{
+        display: block;
+    }
+}
+
+#pf_home {
+    max-width: 47.5%;
+}
+
+@media only screen and (max-width: 480px) {
+    // set the text above or below
+    #hire-text-after{
+        display: none;
+        // display: block;
+    }
+    #hire-text-before{
+        display: block;
+        // display: none;
+    }
+    #img-container {
+        height: 90vmin;
+        overflow: hidden;
+    }
+    #pf_home {
+        max-width: 100%;
+        width: 100%;
+        margin: -20vmin 0 0rem 0;
+    }
+    .wrap-around ul {
+        // padding-left: 2.5rem !important;
+        padding-left: 1.5rem !important;
+        // margin-top: 0.5rem !important;
+    }
+}
+
+#centered_company {
+    display: flex;
+    justify-content: center; 
+
+    .flex-center {
+        display: flex;
+        flex-wrap: wrap; /* Allows elements to wrap when not enough space */
+        justify-content: center; /* Center-aligns the elements horizontally */
+        align-items: center; /* Center-aligns the elements vertically */
+        i {
+            white-space: preserve nowrap;
+        }
+    
+      }
+  }
+
+.hugo-cite-group
+  .hugo-cite-citation {
+    [theme=dark] & {
+        background-color: $search-background-color-dark;
+    }
+}
+
+// .mermaid {
+//     position: relative;
+// }

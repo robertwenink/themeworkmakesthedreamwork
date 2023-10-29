@@ -1,0 +1,315 @@
+{{- if not ($.Page.Scratch.Get "embed-pdf-count") -}}
+<meta name="viewport" content="width=device-width, initial-scale = 1.0, maximum-scale = 1.0, user-scalable=no">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script type="text/javascript" src= '/js/pdf-js/build/pdf.js'></script>
+<script type="text/javascript" src= '/js/pdf-js/build/pdf.worker.js'></script>
+
+<style>
+  #embed-pdf-container {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 20vh;
+    /* overflow-y:scroll; */
+  }
+  
+  .pdf-canvas {
+    border: 1px solid black;
+    direction: ltr;
+    width: 100%;
+    height: auto;
+    display: none;
+  }
+  
+  #the-canvas {
+    border: 1px solid black;
+    direction: ltr;
+    width: 100%;
+    height: auto;
+    display: none;
+  }
+  
+  .pdf-loadingWrapper {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 350px;
+    float:left;
+  }
+
+  .pdf-paginator {
+    position: relative;
+    z-index: 10;
+  }
+  
+  .pdf-loading {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border: 3px solid #d2d0d0;;
+    border-radius: 50%;
+    border-top-color: #383838;
+    animation: spin 1s ease-in-out infinite;
+    -webkit-animation: spin 1s ease-in-out infinite;
+  }
+ 
+  /* hyperlink annotations */
+  #annotation-layer { 
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    opacity: 0.8;
+    line-height: 1.5rem;
+  }
+
+  #annotation-layer > section {
+    color: transparent;
+    position: absolute;
+    white-space: pre;
+    cursor: text;
+    transform-origin: 0% 0%;
+  }
+
+  #annotation-layer > .linkAnnotation > a {
+    position: absolute;
+    font-size: 1.5em;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  #annotation-layer > .linkAnnotation :hover {
+    background-color: rgb(255, 255, 0, 0.2);
+  }
+
+
+  /* Download link */
+  #overlayText {
+    word-wrap: break-word;
+    display: grid;
+    justify-content: end;
+  }
+  
+  #overlayText a {
+    position: relative;
+    top: 10px;
+    right: 4px;
+    color: #000;
+    margin: auto;
+    background-color: #eeeeee;
+    padding: 0.3em 1em;
+    border: solid 2px;
+    border-radius: 12px;
+    border-color: #00000030;
+    text-decoration: none;
+  }
+  
+  #overlayText svg {
+    height: clamp(1em, 2vw, 1.4em);
+    width:  clamp(1em, 2vw, 1.4em);
+  }
+  
+  
+  
+  @keyframes spin {
+    to { -webkit-transform: rotate(360deg); }
+  }
+  @-webkit-keyframes spin {
+    to { -webkit-transform: rotate(360deg); }
+  }
+  </style>
+{{- end -}}
+
+{{- $.Page.Scratch.Add "embed-pdf-count" 1 -}}
+<div class="embed-pdf-container" id="embed-pdf-container-{{ substr (.Get "url" | md5) 0 8 }}">
+    <div class="pdf-loadingWrapper" id="pdf-loadingWrapper-{{ substr (.Get "url" | md5) 0 8 }}">
+        <div class="pdf-loading" id="pdf-loading-{{ substr (.Get "url" | md5) 0 8 }}"></div>
+    </div>
+    <div id="annotation-layer"></div>
+    <div id="overlayText">
+      <a href="{{ .Get "url" }}" aria-label="Download" download>
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
+            <path d="M9 13c.3 0 .5-.1.7-.3L15.4 7 14 5.6l-4 4V1H8v8.6l-4-4L2.6 7l5.7 5.7c.2.2.4.3.7.3zm-7 2h14v2H2z" />
+        </svg>
+      </a>
+    </div>
+    <canvas class="pdf-canvas" id="pdf-canvas-{{ substr (.Get "url" | md5) 0 8 }}"></canvas>
+</div>
+
+<div class="pdf-paginator" id="pdf-paginator-{{ substr (.Get "url" | md5) 0 8 }}">
+    <button id="pdf-prev-{{ substr (.Get "url" | md5) 0 8 }}">Previous</button>
+    <button id="pdf-next-{{ substr (.Get "url" | md5) 0 8 }}">Next</button>
+    <span>
+      <span class="pdf-pagenum" id='pdf-pagenum-{{ substr (.Get "url" | md5) 0 8 }}'></span>&nbsp;/&nbsp;<span class="pdf-pagecount" id="pdf-pagecount-{{ substr (.Get "url" | md5) 0 8 }}"></span>
+    </span>
+    <a class="pdf-source" id="pdf-source-{{ substr (.Get "url" | md5) 0 8 }}" href="{{ .Get "url" }}">[pdf]</a>
+</div>
+
+<noscript>
+View the PDF file <a class="pdf-source" id="pdf-source-noscript-{{ substr (.Get "url" | md5) 0 8 }}" href="{{ .Get "url" }}">here</a>.
+</noscript>
+
+<script type="text/javascript">
+    var url = '{{ .Get "url" }}';
+    var hidePaginator = "{{ .Get "hidePaginator" }}" === "true";
+    var hideLoader = "{{ .Get "hideLoader" }}" === "true";
+    var selectedPageNum = parseInt("{{ .Get "renderPageNum" }}") || 1;
+
+    // Change the Scale value for lower or higher resolution.
+    var pdfDoc = null,
+        pageNum = selectedPageNum,
+        current_page = selectedPageNum,
+        totalPages = 0,
+        pageRendering = false,
+        scale = 3,
+        canvas_id = "#pdf-canvas-{{ substr (.Get "url" | md5) 0 8 }}"
+        loader_id = "#pdf-loadingWrapper-{{ substr (.Get "url" | md5) 0 8 }}",
+        checksum_string = '-{{ substr (.Get "url" | md5) 0 8 }}',
+        canvas = document.getElementById("pdf-canvas-{{ substr (.Get "url" | md5) 0 8 }}"),
+        ctx = canvas.getContext('2d'),
+        paginator = document.getElementById("pdf-paginator-{{ substr (.Get "url" | md5) 0 8 }}"),
+        loadingWrapper = document.getElementById('pdf-loadingWrapper-{{ substr (.Get "url" | md5) 0 8 }}');
+
+
+    // Attempt to show paginator and loader if enabled
+    showPaginator();
+    showLoader();
+
+    totalPages
+
+function showPDF(pdf_url) {
+	showLoader()
+
+	PDFJS.getDocument({ url: pdf_url }).then(function(pdf_doc) {
+		pdfDoc = pdf_doc;
+		totalPages = pdfDoc.numPages;
+		
+		$("#pdf-total-pages").text(totalPages);
+
+		// Show the first page
+		showPage(1);
+	});
+}
+
+function showPage(page_num) {
+	pageRendering = true;
+	current_page = page_num;
+
+	// While page is being rendered hide the canvas & annotayion layer and show a loading message
+	$("#annotation-layer").hide()
+  showLoader()
+
+	// Update current page in HTML
+  $('#pdf-pagenum-'+checksum_string).text(page_num);
+	
+	// Fetch the page
+	pdfDoc.getPage(page_num).then(function(page) {
+
+    // As the canvas is of a fixed width we need to set the scale of the viewport accordingly
+    var scale_required = $(canvas_id).width() / page.getViewport(1).width;
+
+		// Get viewport of the page at required scale
+		var viewport = page.getViewport(scale);
+		var viewport_annotation = page.getViewport(scale_required);
+
+		// Set canvas height, 
+    // deze waardes worden daadwerkelijk bij de render gebruikt, 
+    // maar css schaalt ze later *effectief* omlaag
+		canvas.height = viewport.height;
+		canvas.width = viewport.width;
+
+    // to not let the paginator make funny jumps during loading 
+    loadingWrapper.style.height = $(canvas_id).height() +"px"
+
+		var renderContext = {
+			canvasContext: ctx,
+			viewport: viewport
+		};
+		
+		// Render the page contents in the canvas
+		page.render(renderContext).then(function() {
+			pageRendering = false;
+
+			// Show the canvas and hide the page loader
+			showContent()
+
+			// Return annotation data of the page after the pdf has been rendered in the canvas
+			return page.getAnnotations();
+		}).then(function(annotationData) {
+			if(annotationData.length == 0)
+				return;
+
+			// Get canvas offset
+			var canvas_offset = $(canvas_id).offset();
+
+			// Assign the CSS created to the annotation-layer element
+			$("#annotation-layer").css({ left: 2.5 + 'px', top: canvas_offset.top + 1 +  'px', height: canvas.height + 'px', width: canvas.width + 'px' });
+
+			PDFJS.AnnotationLayer.render({
+				viewport: viewport_annotation.clone({ dontFlip: true }),
+				div: $("#annotation-layer").get(0),
+				annotations: annotationData,
+				page: page
+			});
+		});
+	});
+}
+
+
+/**
+ * Hides loader and shows canvas
+ */
+function showContent() {
+  loadingWrapper.style.display = 'none';
+  canvas.style.display = 'block';
+  $("#annotation-layer").html('').show();
+}
+
+/**
+ * If we haven't disabled the loader, show loader and hide canvas
+ */
+function showLoader() {
+  if(hideLoader) return
+  loadingWrapper.style.display = 'flex';
+  canvas.style.display = 'none';
+  $("#annotation-layer").hide()
+}
+
+/**
+ * If we haven't disabled the paginator, show paginator
+ */
+function showPaginator() {
+  if(hidePaginator) {
+    paginator.style.display = 'none';
+  }
+  else {
+    paginator.style.display = 'block';
+  }
+}
+
+/**
+ * Displays previous page.
+ */
+function onPrevPage() {
+  if(current_page != 1)
+    showPage(--current_page);
+}
+document.getElementById('pdf-prev'+checksum_string).addEventListener('click', onPrevPage);
+
+/**
+ * Displays next page.
+ */
+function onNextPage() {
+  if(current_page != totalPages )
+    showPage(++current_page);
+}
+document.getElementById('pdf-next'+checksum_string).addEventListener('click', onNextPage);
+
+// Send the object url of the pdf
+showPDF(url);
+</script>

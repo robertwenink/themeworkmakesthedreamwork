@@ -1,0 +1,14 @@
+<nav aria-label="breadcrumb" class="breadcrumb">
+  <ol>
+    {{ range after 1 .Ancestors.Reverse }}
+      <li>
+        <a href="{{ .Permalink }}">{{ .LinkTitle }}</a>
+      </li>
+    {{ end }}
+    {{ if gt (len .Ancestors.Reverse) 1 }}
+    <li class="active">
+      <a aria-current="page" href="{{ .Permalink }}">{{ .LinkTitle }}</a>
+    </li>
+    {{ end }}
+  </ol>
+</nav>
