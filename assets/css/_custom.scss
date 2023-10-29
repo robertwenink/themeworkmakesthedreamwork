@@ -97,14 +97,15 @@
         display: block;
         // display: none;
     }
+    // NOTE dit hieronder gecombineerd met de negatieve margin van pf_home geeft een effectieve css crop.
     #img-container {
-        height: 90vmin;
+        // height: 90vmin;
         overflow: hidden;
     }
     #pf_home {
         max-width: 100%;
         width: 100%;
-        margin: -20vmin 0 0rem 0;
+        margin: -5vmin 0 -5vmin 0;
     }
     .wrap-around ul {
         // padding-left: 2.5rem !important;
