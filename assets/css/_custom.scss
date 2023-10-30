@@ -2,28 +2,6 @@
 // Custom style
 // ==============================
 
-.section-separator {
-    border-bottom: $global-hr-line #f0f0f0;
-}
-
-.mermaid {
-    position: relative;
-    text-align: center;
-  }
-
-.mermaid > svg
-{   
-    // because mermaid assigns a height to the css that we need to override
-	height: inherit;
-}
-
-
-// for cites.
-.container {
-    overflow: hidden;
-}
-
-
 .wrap-around {
     display: inline-block;
     width: 100%;
@@ -129,13 +107,6 @@
     
       }
   }
-
-.hugo-cite-group
-  .hugo-cite-citation {
-    [theme=dark] & {
-        background-color: $search-background-color-dark;
-    }
-}
 
 // .mermaid {
 //     position: relative;
