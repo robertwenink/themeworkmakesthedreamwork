@@ -33,21 +33,23 @@
             {{- partial "paginator.html" . -}}
         {{- end -}}
     </div>
+    
+    {{ with $params.showarchive }}
+        <div class="page archive">
+            <h2 id="categories" class="headerLink"> <a href="#categories" style="color:#2d96bd">#</a> Categories</h2>
+            <div class="tag-cloud-tags">
+                {{- range $.Site.Taxonomies.categories.ByCount -}}
+                    <a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <sup>{{ .Count }}</sup></a>
+                {{- end -}}
+            </div>
 
-    <div class="page archive">
-        <h2 id="categories" class="headerLink"> <a href="#categories" style="color:#2d96bd">#</a> Categories</h2>
-        <div class="tag-cloud-tags">
-            {{- range $.Site.Taxonomies.categories.ByCount -}}
-                <a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <sup>{{ .Count }}</sup></a>
-            {{- end -}}
+            <h2 id="tags"><a href="#tags" style="color:#2d96bd">#</a> Tags</h2>
+            <div class="tag-cloud-tags">
+                {{- range $.Site.Taxonomies.tags.ByCount -}}
+                    <a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <sup>{{ .Count }}</sup></a>
+                {{- end -}}
+            </div>
         </div>
-
-        <h2 id="tags"><a href="#tags" style="color:#2d96bd">#</a> Tags</h2>
-        <div class="tag-cloud-tags">
-            {{- range $.Site.Taxonomies.tags.ByCount -}}
-                <a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <sup>{{ .Count }}</sup></a>
-            {{- end -}}
-        </div>
-    </div>
+    {{- end -}}
 
 {{- end -}}
