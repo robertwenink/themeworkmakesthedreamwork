@@ -9,6 +9,7 @@ Additionally includes:
 - Proper Katex support, with horizontally scrolling equations for mobile and a makeshift referencing system (not available through built-in Katex) using \cref{..} and \label{..}.
 - Built-in pdf viewer based on [hugo-embed-pdf-shortcode](https://github.com/anvithks/hugo-embed-pdf-shortcode), but WITH the annotations layer (hyperlinks, etc) enabled.
 - Corrected lightgallery style.
+- Correct mermaid display on mobile.
 - Posts section layout with filtering options per category.
 - Added possibility to add a posts series (also displayed in the Posts section).
 - Added the parameter showarchive. Effective for the index page (Categories + tags). Set showarchive: true to show, otherwise it is hidden.
