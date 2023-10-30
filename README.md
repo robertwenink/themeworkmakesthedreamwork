@@ -11,6 +11,7 @@ Additionally includes:
 - Corrected lightgallery style.
 - Posts section layout with filtering options per category.
 - Added possibility to add a posts series (also displayed in the Posts section).
+- Added the parameter showarchive. Effective for the index page (Categories + tags). Set showarchive: true to show, otherwise it is hidden.
 - Many small style and formatting improvements that make more sense to me.
 
 ## Add the theme
