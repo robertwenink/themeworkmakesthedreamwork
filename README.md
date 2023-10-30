@@ -6,7 +6,7 @@ Additionally includes:
 - SEO and accessibility improvements
 - Citations support through the {{< cite "yourcitation" >}} shortcode, based on [hugo-cite](https://github.com/loup-brun/hugo-cite). 
   Supports textcite through appending the citekey with a '-' like {{< cite "yourcitation-" >}}.
-- Proper Katex support, with horizontally scrolling equations for mobile and a makeshift referencing system (not available through built-in Katex) using $\cref{..}$ and \label{..}.
+- Proper Katex support, with horizontally scrolling equations for mobile and a makeshift referencing system (not available through built-in Katex) using \cref{..} and \label{..}.
 - Corrected lightgallery style
 - Posts section layout with filtering options per categorie
 - Added possibility to add a posts series (also displayed in the Posts section)
