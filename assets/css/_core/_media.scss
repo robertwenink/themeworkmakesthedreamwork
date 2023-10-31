@@ -1,12 +1,12 @@
 @media only screen and (max-width: 1440px) {
-  .page, .header-wrapper {
+  .page, .header-wrapper, .footer-container {
     // width: 60%;
     width: 864px; 
   }
 }
 
 @media only screen and (max-width: 1200px) {
-  .page, .header-wrapper {
+  .page, .header-wrapper, .footer-container {
     // is 1440*60% maar ook 960px*90%!
     width: 864px; 
   }
@@ -29,7 +29,7 @@
 
 @media only screen and (max-width: 960px) {
 
-  .page, .header-wrapper  {
+  .page, .header-wrapper, .footer-container {
     width: 90%;
   }
 
@@ -49,6 +49,10 @@
 
   body.blur {
     overflow: hidden;
+  }
+  
+  .footer-container {
+    width: 100%;
   }
 
   .page  {

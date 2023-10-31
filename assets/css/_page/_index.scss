@@ -15,7 +15,7 @@
   @include blur;
 }
 
-.header-wrapper {
+.header-wrapper, .footer-container {
   position: relative;
   max-width: 800px;
   width: 60%;
