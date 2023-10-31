@@ -19,11 +19,15 @@
 
     .floater {
       flex: 1;
+      flex-grow: 1;
       min-width: 200px;
     }
 
     .center {
       text-align: center;
+      li {
+        white-space: nowrap;
+      }
     }
 
     .right {
@@ -34,6 +38,7 @@
       .footer-floats-container { display: block;}
       .floater { width: calc(50% - 0.14rem); display: inline-block; }
       .center, .right { text-align: left;}
+      .center { width: max-content;}
       .right { float: left;}
     }
 
