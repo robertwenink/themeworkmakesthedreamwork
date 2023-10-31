@@ -1,8 +1,8 @@
 .footer {
   // width: 100%;
   line-height: 1.5rem;
-  padding: 2rem 1rem 1rem 1rem;
-  margin-top: 2rem;
+  padding: 1rem 1rem 1rem 1rem;// 2 min margin-top header a 1
+  margin-top: 2rem; 
 
   background-color: $header-background-color;
   [theme=dark] & {
@@ -11,16 +11,30 @@
 
   .footer-container {
     font-size: 1rem;
-    
-    .left-float-container {
-      float: left;
-      width: 33%;
+
+    .footer-floats-container {
+      display: flex;
+      justify-content: space-between;
     }
-    .centred-text {
+
+    .floater {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .center {
       text-align: center;
     }
-    .right-text {
+
+    .right {
       text-align: right;
+    }
+
+    @media only screen and (max-width: 850px) {
+      .footer-floats-container { display: block;}
+      .floater { width: calc(50% - 0.14rem); display: inline-block; }
+      .center, .right { text-align: left;}
+      .right { float: left;}
     }
 
     .bottom-container {
@@ -60,7 +74,14 @@
     }
 
     h4 {
-      margin: 0 0 0.5rem 0;
+      margin: 1rem 0 0.5rem 0;
+    }
+
+    p { margin: 0; padding: 0; }
+
+    ul, li {
+      margin:0;
+      padding: 0;
     }
   }
 

@@ -1,59 +1,61 @@
 {{- if ne .Site.Params.footer.enable false -}}
     <footer class="footer">
         <div class="footer-container">
-            {{- if ne .Site.Params.footer.company false -}}
-            <div class="left-float-container">
-                {{- /* Company details and contact info */ -}}
-                <ul class="vertical menu">
-                    <li>
-                        <h4>Contact</h4>
-                    </li>
-                    <li>
-                        <a href="tel:{{ .Site.Params.company.phone }}" class="white">
-                            <img src='{{ (resources.Get "svg/phone.svg" | minify).RelPermalink }}' alt="">
-                            {{ .Site.Params.company.phone }}                        
-                        </a>
-                    </li>
-                    <li>
-                        <a href="mailto:{{ .Site.Params.company.email }}" class="white">
-                            <img src='{{ (resources.Get "svg/envelope.svg" | minify).RelPermalink }}' alt="">
-                            {{ .Site.Params.company.email }}
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <div class="footer-floats-container">
+                {{- if ne .Site.Params.footer.company false -}}
+                <div class="floater left">
+                    {{- /* Company details and contact info */ -}}
+                    <ul class="vertical menu">
+                        <li>
+                            <h4>Contact</h4>
+                        </li>
+                        <li>
+                            <a href="tel:{{ .Site.Params.company.phone }}" class="white">
+                                <img src='{{ (resources.Get "svg/phone.svg" | minify).RelPermalink }}' alt="">
+                                {{ .Site.Params.company.phone }}                        
+                            </a>
+                        </li>
+                        <li>
+                            <a href="mailto:{{ .Site.Params.company.email }}" class="white">
+                                <img src='{{ (resources.Get "svg/envelope.svg" | minify).RelPermalink }}' alt="">
+                                {{ .Site.Params.company.email }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
 
-            <div class="left-float-container centred-text">
-                {{- /* Company details and contact info */ -}}
-                <ul class="vertical menu">
-                    <li>
-                        <h4>Company details</h4>
-                    </li>
-                    <li>
-                        Chamber of Commerce: <a href="{{ .Site.Params.company.cocHref }}" rel="noopener noreffer">{{ .Site.Params.company.cocNo }}</a>
-                    </li>
-                    <li>
-                        VAT: {{ .Site.Params.company.vatNo }}
-                    </li>
-                </ul>
-            </div>
+                <div class="floater center">
+                    {{- /* Company details and contact info */ -}}
+                    <ul class="vertical menu">
+                        <li>
+                            <h4>Company details</h4>
+                        </li>
+                        <li>
+                            Chamber of Commerce: <a href="{{ .Site.Params.company.cocHref }}" rel="noopener noreffer">{{ .Site.Params.company.cocNo }}</a>
+                        </li>
+                        <li>
+                            VAT: {{ .Site.Params.company.vatNo }}
+                        </li>
+                    </ul>
+                </div>
 
-            <div class="left-float-container right-text">
-                {{- /* Company details and contact info */ -}}
-                <ul class="vertical menu">
-                    <li>
-                        <h4>Links</h4>
-                    </li>
-                    {{ with .Site.Params.company.cvLocation }}
-                    <li>
-                        <a href="{{ . }}" rel="noopener noreffer">
-                            Curriculum Vitae
-                        </a>
-                    </li>
-                    {{ end }}
-                </ul>
+                <div class="floater right">
+                    {{- /* Company details and contact info */ -}}
+                    <ul class="vertical menu">
+                        <li>
+                            <h4>Links</h4>
+                        </li>
+                        {{ with .Site.Params.company.cvLocation }}
+                        <li>
+                            <a href="{{ . }}" rel="noopener noreffer">
+                                Curriculum Vitae
+                            </a>
+                        </li>
+                        {{ end }}
+                    </ul>
+                </div>
+                {{- end -}}
             </div>
-            {{- end -}}
 
             <!-- ############################# -->
             <div class="bottom-container">
@@ -96,12 +98,12 @@
                     {{- end -}}
                 </div>
             </div>
-
-            {{- /* License */ -}}
-            {{- with .Site.Params.footer.license -}}
-                &nbsp;|&nbsp;<span class="license">{{ . | safeHTML }}</span>
-            {{- end -}}
-
         </div>
+
+        {{- /* License */ -}}
+        {{- with .Site.Params.footer.license -}}
+            &nbsp;|&nbsp;<span class="license">{{ . | safeHTML }}</span>
+        {{- end -}}
+
     </footer>
 {{- end -}}
