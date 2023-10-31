@@ -42,17 +42,36 @@
 #my-name-is-before, #hire-text-before{
     display: none;
 }
+#img-container {
+    max-width: 47.5%;
+    width: 47.5%;
+    margin: 0.5rem 2.5% 2.5% 0;
+    float: left;
+    position: relative;
+}
 
-@media only screen and (max-width: 704px) {
+#pf_home {
+    max-width: 100%;
+    width: 100%;
+    height: 16rem;
+    object-fit: cover;
+    object-position: -0% 40%; 
+    margin: 0;
+}
+
+@media only screen and (max-width: 780px) { // was 704
     #my-name-is-after{
         display: none;
     }
     #my-name-is-before{
         display: block;
     }
+    #pf_home {
+        height: 21vw;
+    }
 }
 
-@media only screen and (max-width: 590px) {
+@media only screen and (max-width: 580px) { //was 590
     #hire-text-after{
         display: none;
     }
@@ -61,29 +80,29 @@
     }
 }
 
-#pf_home {
-    max-width: 47.5%;
-}
-
-@media only screen and (max-width: 480px) {
+@media only screen and (max-width: 580px) { // was 480
     // set the text above or below
     #hire-text-after{
         display: none;
-        // display: block;
     }
     #hire-text-before{
         display: block;
-        // display: none;
     }
     // NOTE dit hieronder gecombineerd met de negatieve margin van pf_home geeft een effectieve css crop.
     #img-container {
-        // height: 90vmin;
-        overflow: hidden;
+        // height: 90vw;
+        float: none;
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
     }
     #pf_home {
         max-width: 100%;
         width: 100%;
-        margin: -5vmin 0 -5vmin 0;
+        height: 30vw;
+        object-fit: cover;
+        object-position: 0% 35%; 
+        margin: 0;
     }
     .wrap-around ul {
         // padding-left: 2.5rem !important;
