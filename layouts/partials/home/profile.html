@@ -22,7 +22,7 @@
     {{- end -}}
     
     {{- if $profile.title_image -}}
-        {{- dict "Src" $profile.title_image | partial "plugin/img.html" -}}
+        {{- dict "Src" $profile.title_image "Width" "200px" "Height" "200px" | partial "plugin/img.html" -}}
     {{- end -}}
 
     <div class="home-group">
