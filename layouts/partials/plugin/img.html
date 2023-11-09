@@ -3,11 +3,13 @@
 {{- $src_org := .Src -}}
 {{- $src_small := .Src -}}
 {{- $src_large := .Src -}}
+{{- $src_xlarge := .Src -}}
 
 {{- $src_mobile := .SrcMobile | default $src -}}
 {{- $src_mobile_org := .SrcMobile | default $src -}}
 {{- $src_mobile_small := .SrcMobile | default $src -}}
 {{- $src_mobile_large := .SrcMobile | default $src -}}
+{{- $src_mobile_xlarge := .SrcMobile | default $src -}}
 
 <!-- Set width for mobile media boundary and typical pagewidth -->
 {{- $w_mobile := 680 -}}
@@ -37,14 +39,17 @@
     {{- with .Resize (printf "%dx%d%s" .Width .Height $webp) -}}
         {{- $src_org = .RelPermalink -}}
     {{- end -}}
-    {{- with .Resize (printf "%dx%s" (cond (ge .Width $w_page) $w_page .Width) $webp) -}}
+    {{- with .Resize (printf "%dx%s" (cond (ge .Width (int (mul $w_page 0.5))) (int (mul $w_page 0.5)) .Width) $webp) -}}
         {{- $src_small = .RelPermalink -}}
     {{- end -}}
-    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_page 2)) (mul $w_page 2) .Width) $webp) -}}
+    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_page 1)) (mul $w_page 1) .Width) $webp) -}}
         {{- $src = .RelPermalink -}}
     {{- end -}}
-    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_page 3)) (mul $w_page 3) .Width) $webp) -}}
+    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_page 2)) (mul $w_page 2) .Width) $webp) -}}
         {{- $src_large = .RelPermalink -}}
+    {{- end -}}    
+    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_page 3)) (mul $w_page 3) .Width) $webp) -}}
+        {{- $src_xlarge = .RelPermalink -}}
     {{- end -}}
     
 
@@ -85,14 +90,17 @@
 
 <!-- Set the mobile sources if passed -->
 {{- with dict "Path" .SrcMobile "Resources" .Resources | partial "function/resource.html" -}}
-    {{- with .Resize (printf "%dx%s" (cond (ge .Width $w_mobile) $w_mobile .Width) $webp) -}}
+    {{- with .Resize (printf "%dx%s" (cond (ge .Width (int (mul $w_mobile 0.5))) (int (mul $w_mobile 0.5)) .Width) $webp) -}}
         {{- $src_mobile_small = .RelPermalink -}}
     {{- end -}}
-    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_mobile 2)) (mul $w_mobile 2) .Width) $webp) -}}
+    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_mobile 1)) (mul $w_mobile 1) .Width) $webp) -}}
         {{- $src_mobile = .RelPermalink -}}
     {{- end -}}
-    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_mobile 3)) (mul $w_mobile 3) .Width) $webp) -}}
+    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_mobile 2)) (mul $w_mobile 2) .Width) $webp) -}}
         {{- $src_mobile_large = .RelPermalink -}}
+    {{- end -}}
+    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_mobile 3)) (mul $w_mobile 3) .Width) $webp) -}}
+        {{- $src_mobile_xlarge = .RelPermalink -}}
     {{- end -}}
 {{- end -}}
 
@@ -108,15 +116,17 @@
     <picture>
         {{- with .SrcMobile -}}
         <source
-        data-srcset="{{ $src_mobile_small | safeURL }}, 
-            {{ $src_mobile | safeURL }} 2x, 
-            {{ $src_mobile_large | safeURL }} 3x"
+        data-srcset="{{ $src_mobile_small | safeURL }} 0.5x, 
+            {{ $src_mobile | safeURL }} 1x, 
+            {{ $src_mobile_large | safeURL }} 2x,
+            {{ $src_mobile_xlarge | safeURL }} 3x"
         media="(max-width: 680px)" />
         {{- end -}}
         <source
-        data-srcset="{{ $src_small | safeURL }}, 
-            {{ $src | safeURL }} 2x, 
-            {{ $src_large | safeURL }} 3x"
+        data-srcset="{{ $src_small | safeURL }} 0.5x, 
+            {{ $src | safeURL }} 1x, 
+            {{ $src_large | safeURL }} 2x,
+            {{ $src_xlarge | safeURL }} 3x"
         {{- with .SrcMobile -}}
         media="(min-width: 681px)" 
         {{- end -}}
