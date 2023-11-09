@@ -9,10 +9,9 @@
 {{- $src_mobile_org := .SrcMobile | default $src -}}
 {{- $src_mobile_small := .SrcMobile | default $src -}}
 {{- $src_mobile_large := .SrcMobile | default $src -}}
-{{- $src_mobile_xlarge := .SrcMobile | default $src -}}
 
 <!-- Set width for mobile media boundary and typical pagewidth -->
-{{- $w_mobile := 680 -}}
+{{- $w_mobile := sub 680 32 -}} <!-- taking 2rem (=32px) margin total into account -->
 {{- $w_page := 800 -}}
 
 <!-- .Width and .Height are the named parameters here -->
@@ -89,7 +88,7 @@
 {{- end -}}
 
 <!-- Set the mobile sources if passed -->
-{{- with dict "Path" .SrcMobile "Resources" .Resources | partial "function/resource.html" -}}
+{{- with dict "Path" $src_mobile "Resources" .Resources | partial "function/resource.html" -}}
     {{- with .Resize (printf "%dx%s" (cond (ge .Width (int (mul $w_mobile 0.5))) (int (mul $w_mobile 0.5)) .Width) $webp) -}}
         {{- $src_mobile_small = .RelPermalink -}}
     {{- end -}}
@@ -98,9 +97,6 @@
     {{- end -}}
     {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_mobile 2)) (mul $w_mobile 2) .Width) $webp) -}}
         {{- $src_mobile_large = .RelPermalink -}}
-    {{- end -}}
-    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_mobile 3)) (mul $w_mobile 3) .Width) $webp) -}}
-        {{- $src_mobile_xlarge = .RelPermalink -}}
     {{- end -}}
 {{- end -}}
 
@@ -114,27 +110,26 @@
 {{- end -}}
 
     <picture>
-        {{- with .SrcMobile -}}
         <source
-        data-srcset="{{ $src_mobile_small | safeURL }} 0.5x, 
-            {{ $src_mobile | safeURL }} 1x, 
-            {{ $src_mobile_large | safeURL }} 2x,
-            {{ $src_mobile_xlarge | safeURL }} 3x"
-        media="(max-width: 680px)" />
-        {{- end -}}
+        data-srcset="{{ $src_mobile_small | safeURL }} {{ int (mul $w_mobile 0.5) }}w, 
+            {{ $src_mobile | safeURL }} {{ int (mul $w_mobile 1) }}w, 
+            {{ $src_mobile_large | safeURL }} {{ int (mul $w_mobile 2) }}w"
+            {{- with .SrcMobile -}}
+            media="(max-width: 680px)"
+            {{- end -}} />
         <source
-        data-srcset="{{ $src_small | safeURL }} 0.5x, 
-            {{ $src | safeURL }} 1x, 
-            {{ $src_large | safeURL }} 2x,
-            {{ $src_xlarge | safeURL }} 3x"
-        {{- with .SrcMobile -}}
-        media="(min-width: 681px)" 
-        {{- end -}}
-            />
+        data-srcset="{{ $src_small | safeURL }} {{ int (mul $w_page 0.5) }}w, 
+            {{ $src | safeURL }} {{ int (mul $w_page 1) }}w, 
+            {{ $src_large | safeURL }} {{ int (mul $w_page 2) }}w,
+            {{ $src_xlarge | safeURL }} {{ int (mul $w_page 3) }}w"
+            {{- with .SrcMobile -}}
+            media="(min-width: 681px)" 
+            {{- end -}} />
         <img
             class="lazyload{{ with .Class }} {{ . }}{{ end }}"
             src="{{ $loading.RelPermalink }}"
             data-src="{{ $src | safeURL }}"
+            data-sizes="auto",
             alt="{{ $alt }}"
             title="{{ .Title | default $alt }}"
             {{- with .Id }}id="{{ . }}"{{ end }}
