@@ -1,10 +1,20 @@
 {{- /* lazysizes and lightgallery */ -}}
 {{- $src := .Src -}}
+{{- $src_org := .Src -}}
+{{- $src_small := .Src -}}
+{{- $src_large := .Src -}}
 
-<!-- .Width and .Height are the name parameters here -->
-<!-- {{ printf "%#v" .Width }} -->
-<!-- {{- $width := .Width -}} -->
-{{ $cutset := "ptxrem%inc vh" }}
+{{- $src_mobile := .SrcMobile | default $src -}}
+{{- $src_mobile_org := .SrcMobile | default $src -}}
+{{- $src_mobile_small := .SrcMobile | default $src -}}
+{{- $src_mobile_large := .SrcMobile | default $src -}}
+
+<!-- Set width for mobile media boundary and typical pagewidth -->
+{{- $w_mobile := 680 -}}
+{{- $w_page := 800 -}}
+
+<!-- .Width and .Height are the named parameters here -->
+{{ $cutset := "ptxrem%inc vhw" }}
 {{ $width := strings.TrimRight $cutset .Width }}
 {{ $width_ext := strings.TrimLeft $width .Width }}
 {{ $ext := $width_ext }}
@@ -14,28 +24,35 @@
 {{ $height_ext := strings.TrimLeft $height .Height }}
 
 <!-- Only transform some extension, and not e.g. svg -->
-{{- $isformat := in (slice ".jpg" ".jpeg" ".png" ".tiff" ".tif") (path.Ext .Src) -}}
+{{ $webp := "" }}
+{{ if in (slice ".jpg" ".jpeg" ".png" ".tiff" ".tif") (path.Ext .Src) }}
+  {{ $webp = " webp" }}
+{{ end }}
 
 {{- with dict "Path" $src "Resources" .Resources | partial "function/resource.html" -}}
-    {{- if $isformat -}}
         <!-- .Width and .Height are the original image dimensions here. 
             Resize only used to change the file formatting, not to change size! (original sizes used).
             Provided width and height are purely for styling convenience. -->
         <!-- {{ printf "%#v" .Width }} -->
-        {{- with .Resize (printf "%dx%d webp" .Width .Height) -}}
-            {{- $src = .RelPermalink -}}
-        {{- end -}}
-    {{- else -}}
+    {{- with .Resize (printf "%dx%d%s" .Width .Height $webp) -}}
+        {{- $src_org = .RelPermalink -}}
+    {{- end -}}
+    {{- with .Resize (printf "%dx%s" (cond (ge .Width $w_page) $w_page .Width) $webp) -}}
+        {{- $src_small = .RelPermalink -}}
+    {{- end -}}
+    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_page 2)) (mul $w_page 2) .Width) $webp) -}}
         {{- $src = .RelPermalink -}}
     {{- end -}}
+    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_page 4)) (mul $w_page 4) .Width) $webp) -}}
+        {{- $src_large = .RelPermalink -}}
+    {{- end -}}
     
+
     <!-- Set the sizes here, default to the width of the image if no html width has been given
         .Width and .Height are the original image dimensions here.
         If no heights were passed in the shortcode, no style is applied -->
     {{ if or (ne $width "") (ne $height "") }}        
         {{ $aspect := div .Height (float .Width) }}
-        <!-- {{ printf "%#v" $width }} -->
-        <!-- {{ printf "%#v" $height }} -->
         
         {{ if and (ne $width "") (ne $height "") }}
             <!-- Select and use smallest size -->
@@ -63,51 +80,60 @@
                 <!-- {{ printf "Scaled to height" }}   -->
             {{ end }}
         {{ end }}
-    {{ end }}
-    <!-- {{ printf "%#v" $width }} -->
-    <!-- {{ printf "%#v" $height }} -->
+    {{- end -}}
 {{- end -}}
 
-{{- $small := .SrcSmall | default $src -}}
-{{- with dict "Path" .SrcSmall "Resources" .Resources | partial "function/resource.html" -}}
-    {{- $small = .RelPermalink -}}
-{{- end -}}
-
-{{- $large := .SrcLarge | default $src -}}
-{{- with dict "Path" .SrcLarge "Resources" .Resources | partial "function/resource.html" -}}
-    {{- $large = .RelPermalink -}}
+<!-- Set the mobile sources if passed -->
+{{- with dict "Path" .SrcMobile "Resources" .Resources | partial "function/resource.html" -}}
+    {{- with .Resize (printf "%dx%s" (cond (ge .Width $w_mobile) $w_mobile .Width) $webp) -}}
+        {{- $src_mobile_small = .RelPermalink -}}
+    {{- end -}}
+    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_mobile 2)) (mul $w_mobile 2) .Width) $webp) -}}
+        {{- $src_mobile = .RelPermalink -}}
+    {{- end -}}
+    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_mobile 4)) (mul $w_mobile 4) .Width) $webp) -}}
+        {{- $src_mobile_large = .RelPermalink -}}
+    {{- end -}}
 {{- end -}}
 
 <!-- Dit was $src, maar dat wil ik niet. alleen alt weergeven als die gedefinieerd is. -->
 {{- $alt := .Alt | default "" -}} 
 
 {{- $loading := resources.Get "svg/loading.svg" | minify -}}
+
 {{- if .Linked -}}
-    <a class="lightgallery" href="{{ $large | safeURL }}" title="{{ .Title | default $alt }}" data-thumbnail="{{ $small | safeURL }}"{{ with .Caption }} data-sub-html="<h2>{{ . }}</h2>{{ with $.Title }}<p>{{ . }}</p>{{ end }}"{{ end }}{{ with .Rel }} rel="{{ . }}"{{ end }}>
+    <a class="lightgallery" href="{{ $src_org | safeURL }}" title="{{ .Title | default $alt }}" data-thumbnail="{{ $src_small | safeURL }}"{{ with .Caption }} data-sub-html="<h2>{{ . }}</h2>{{ with $.Title }}<p>{{ . }}</p>{{ end }}"{{ end }}{{ with .Rel }} rel="{{ . }}"{{ end }}>
+{{- end -}}
+
+    <picture>
+        {{- with .SrcMobile -}}
+        <source
+        data-srcset="{{ $src_mobile_small | safeURL }}, 
+            {{ $src_mobile | safeURL }} 2x, 
+            {{ $src_mobile_large | safeURL }} 4x"
+        media="(max-width: 680px)" />
+        {{- end -}}
+        <source
+        data-srcset="{{ $src_small | safeURL }}, 
+            {{ $src | safeURL }} 2x, 
+            {{ $src_large | safeURL }} 4x"
+        {{- with .SrcMobile -}}
+        media="(min-width: 681px)" 
+        {{- end -}}
+            />
         <img
             class="lazyload{{ with .Class }} {{ . }}{{ end }}"
             src="{{ $loading.RelPermalink }}"
             data-src="{{ $src | safeURL }}"
-            data-srcset="{{ $small | safeURL }}, {{ $src | safeURL }} 1.5x, {{ $large | safeURL }} 2x"
-            data-sizes="auto"
             alt="{{ $alt }}"
             title="{{ .Title | default $alt }}"
             {{- with .Id }}id="{{ . }}"{{ end }}
-            style='{{ with $width }}width:{{print . $ext}};{{ end }}{{ with $height }}height:{{print . $ext}};{{ end }}'
+            style='{{ with $width }}max-width:{{print . $ext}};{{ end }}{{ with $height }}max-height:{{print . $ext}};{{ end }}'
             />
+    </picture>
+
+{{- if .Linked -}}
     </a>
-{{- else -}}
-    <img
-        class="lazyload{{ with .Class }} {{ . }}{{ end }}"
-        src="{{ $loading.RelPermalink }}"
-        data-src="{{ $src | safeURL }}"
-        data-srcset="{{ $small | safeURL }}, {{ $src | safeURL }} 1.5x, {{ $large | safeURL }} 2x"
-        data-sizes="auto"
-        alt="{{ $alt }}"
-        title="{{ .Title | default $alt }}"
-        {{- with .Id }}id="{{ . }}"{{ end }}
-        style='{{ with $width }}width:{{print . $ext}};{{ end }}{{ with $height }}height:{{print . $ext}};{{ end }}'
-        />
 {{- end -}}
 
 <!-- DEBUGGING -->

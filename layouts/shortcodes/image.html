@@ -5,8 +5,7 @@
 
 {{- if .IsNamedParams -}}
     {{- $options = dict "Title" (.Get "title") | merge $options -}}
-    {{- $options = dict "SrcSmall" (.Get "src_s") | merge $options -}}
-    {{- $options = dict "SrcLarge" (.Get "src_l") | merge $options -}}
+    {{- $options = dict "SrcMobile" (.Get "src_mobile") | merge $options -}}
     {{- $options = dict "Height" (.Get "height") | merge $options -}}
     {{- $options = dict "Width" (.Get "width") | merge $options -}}
     {{- $options = dict "Id" (.Get "id") | merge $options -}}
