@@ -142,7 +142,7 @@
         <img
             class="lazyload{{ with .Class }} {{ . }}{{ end }}"
             src="{{ $loading.RelPermalink }}"
-            data-src="{{ $src | safeURL }}"
+            {{- with .SrcMobile -}}data-src="{{ $src_mobile | safeURL }}"{{- else -}}data-src="{{ $src | safeURL }}"{{- end -}}
             {{ if $isformat }} data-sizes="auto", {{ end }}
             alt="{{ $alt }}"
             title="{{ .Title | default $alt }}"
