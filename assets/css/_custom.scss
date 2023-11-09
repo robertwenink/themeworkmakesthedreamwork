@@ -1,6 +1,19 @@
 // ==============================
 // Custom style
 // ==============================
+.home {
+    .home-profile {
+        img {
+            min-height: 100px;
+            max-height: 200px;
+            // float: left;
+        }
+
+        picture {
+            width: 45%;
+        }
+    }
+}
 
 .wrap-around {
     display: inline-block;

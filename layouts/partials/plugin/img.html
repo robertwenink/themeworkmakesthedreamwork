@@ -25,32 +25,33 @@
 {{ $height_ext := strings.TrimLeft $height .Height }}
 
 <!-- Only transform some extension, and not e.g. svg -->
-{{ $webp := "" }}
-{{ if in (slice ".jpg" ".jpeg" ".png" ".tiff" ".tif") (path.Ext .Src) }}
-  {{ $webp = " webp" }}
-{{ end }}
+{{ $isformat := in (slice ".jpg" ".jpeg" ".png" ".tiff" ".tif") (path.Ext .Src) }}
 
 {{- with dict "Path" $src "Resources" .Resources | partial "function/resource.html" -}}
         <!-- .Width and .Height are the original image dimensions here. 
             Resize only used to change the file formatting, not to change size! (original sizes used).
             Provided width and height are purely for styling convenience. -->
         <!-- {{ printf "%#v" .Width }} -->
-    {{- with .Resize (printf "%dx%d%s" .Width .Height $webp) -}}
-        {{- $src_org = .RelPermalink -}}
-    {{- end -}}
-    {{- with .Resize (printf "%dx%s" (cond (ge .Width (int (mul $w_page 0.5))) (int (mul $w_page 0.5)) .Width) $webp) -}}
-        {{- $src_small = .RelPermalink -}}
-    {{- end -}}
-    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_page 1)) (mul $w_page 1) .Width) $webp) -}}
+    {{ if $isformat }}
+        {{- with .Resize (printf "%dx%d%s" .Width .Height " webp") -}}
+            {{- $src_org = .RelPermalink -}}
+        {{- end -}}
+        {{- with .Resize (printf "%dx%s" (cond (ge .Width (int (mul $w_page 0.5))) (int (mul $w_page 0.5)) .Width) " webp") -}}
+            {{- $src_small = .RelPermalink -}}
+        {{- end -}}
+        {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_page 1)) (mul $w_page 1) .Width) " webp") -}}
+            {{- $src = .RelPermalink -}}
+        {{- end -}}
+        {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_page 2)) (mul $w_page 2) .Width) " webp") -}}
+            {{- $src_large = .RelPermalink -}}
+        {{- end -}}    
+        {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_page 3)) (mul $w_page 3) .Width) " webp") -}}
+            {{- $src_xlarge = .RelPermalink -}}
+        {{- end -}}
+    {{- else -}}
         {{- $src = .RelPermalink -}}
     {{- end -}}
-    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_page 2)) (mul $w_page 2) .Width) $webp) -}}
-        {{- $src_large = .RelPermalink -}}
-    {{- end -}}    
-    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_page 3)) (mul $w_page 3) .Width) $webp) -}}
-        {{- $src_xlarge = .RelPermalink -}}
-    {{- end -}}
-    
+        
 
     <!-- Set the sizes here, default to the width of the image if no html width has been given
         .Width and .Height are the original image dimensions here.
@@ -88,15 +89,17 @@
 {{- end -}}
 
 <!-- Set the mobile sources if passed -->
-{{- with dict "Path" $src_mobile "Resources" .Resources | partial "function/resource.html" -}}
-    {{- with .Resize (printf "%dx%s" (cond (ge .Width (int (mul $w_mobile 0.5))) (int (mul $w_mobile 0.5)) .Width) $webp) -}}
-        {{- $src_mobile_small = .RelPermalink -}}
-    {{- end -}}
-    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_mobile 1)) (mul $w_mobile 1) .Width) $webp) -}}
-        {{- $src_mobile = .RelPermalink -}}
-    {{- end -}}
-    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_mobile 2)) (mul $w_mobile 2) .Width) $webp) -}}
-        {{- $src_mobile_large = .RelPermalink -}}
+{{ if $isformat }}
+    {{- with dict "Path" $src_mobile "Resources" .Resources | partial "function/resource.html" -}}
+        {{- with .Resize (printf "%dx%s" (cond (ge .Width (int (mul $w_mobile 0.5))) (int (mul $w_mobile 0.5)) .Width) " webp") -}}
+            {{- $src_mobile_small = .RelPermalink -}}
+        {{- end -}}
+        {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_mobile 1)) (mul $w_mobile 1) .Width) " webp") -}}
+            {{- $src_mobile = .RelPermalink -}}
+        {{- end -}}
+        {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_mobile 2)) (mul $w_mobile 2) .Width) " webp") -}}
+            {{- $src_mobile_large = .RelPermalink -}}
+        {{- end -}}
     {{- end -}}
 {{- end -}}
 
@@ -110,6 +113,7 @@
 {{- end -}}
 
     <picture>
+        {{ if $isformat }}
         <source
         data-srcset="{{ $src_mobile_small | safeURL }} {{ int (mul $w_mobile 0.5) }}w, 
             {{ $src_mobile | safeURL }} {{ int (mul $w_mobile 1) }}w, 
@@ -125,11 +129,12 @@
             {{- with .SrcMobile -}}
             media="(min-width: 681px)" 
             {{- end -}} />
+        {{- end -}}
         <img
             class="lazyload{{ with .Class }} {{ . }}{{ end }}"
             src="{{ $loading.RelPermalink }}"
             data-src="{{ $src | safeURL }}"
-            data-sizes="auto",
+            {{ if $isformat }} data-sizes="auto", {{ end }}
             alt="{{ $alt }}"
             title="{{ .Title | default $alt }}"
             {{- with .Id }}id="{{ . }}"{{ end }}
