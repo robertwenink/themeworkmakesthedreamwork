@@ -11,13 +11,13 @@
                         </li>
                         <li>
                             <a href="tel:{{ .Site.Params.company.phone }}" class="white">
-                                <img src='{{ (resources.Get "svg/phone.svg" | minify).RelPermalink }}' alt="" width="15px">
+                                <img src='{{ (resources.Get "svg/phone.svg" | minify).RelPermalink }}' alt="" width="15px" height="15px">
                                 {{ .Site.Params.company.phone }}                        
                             </a>
                         </li>
                         <li>
                             <a href="mailto:{{ .Site.Params.company.email }}" class="white">
-                                <img src='{{ (resources.Get "svg/envelope.svg" | minify).RelPermalink }}' alt="" width="15px">
+                                <img src='{{ (resources.Get "svg/envelope.svg" | minify).RelPermalink }}' alt="" width="15px" height="11.25px">
                                 {{ .Site.Params.company.email }}
                             </a>
                         </li>
