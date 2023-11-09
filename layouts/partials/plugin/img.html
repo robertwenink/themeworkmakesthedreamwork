@@ -43,7 +43,7 @@
     {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_page 2)) (mul $w_page 2) .Width) $webp) -}}
         {{- $src = .RelPermalink -}}
     {{- end -}}
-    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_page 4)) (mul $w_page 4) .Width) $webp) -}}
+    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_page 3)) (mul $w_page 3) .Width) $webp) -}}
         {{- $src_large = .RelPermalink -}}
     {{- end -}}
     
@@ -91,7 +91,7 @@
     {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_mobile 2)) (mul $w_mobile 2) .Width) $webp) -}}
         {{- $src_mobile = .RelPermalink -}}
     {{- end -}}
-    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_mobile 4)) (mul $w_mobile 4) .Width) $webp) -}}
+    {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_mobile 3)) (mul $w_mobile 3) .Width) $webp) -}}
         {{- $src_mobile_large = .RelPermalink -}}
     {{- end -}}
 {{- end -}}
@@ -110,13 +110,13 @@
         <source
         data-srcset="{{ $src_mobile_small | safeURL }}, 
             {{ $src_mobile | safeURL }} 2x, 
-            {{ $src_mobile_large | safeURL }} 4x"
+            {{ $src_mobile_large | safeURL }} 3x"
         media="(max-width: 680px)" />
         {{- end -}}
         <source
         data-srcset="{{ $src_small | safeURL }}, 
             {{ $src | safeURL }} 2x, 
-            {{ $src_large | safeURL }} 4x"
+            {{ $src_large | safeURL }} 3x"
         {{- with .SrcMobile -}}
         media="(min-width: 681px)" 
         {{- end -}}
@@ -135,9 +135,3 @@
 {{- if .Linked -}}
     </a>
 {{- end -}}
-
-<!-- DEBUGGING -->
-<!-- {{ printf "%#v" $width }}
-{{ printf "%#v" .Width }}
-{{ printf "%#v" $height }}
-{{ printf "%#v" .Height }} -->
