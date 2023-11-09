@@ -191,10 +191,10 @@
 {{- $config | jsonify | printf "window.config=%s;" | dict "Content" | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
 
 {{- /* Theme script */ -}}
-{{- dict "Source" "js/theme.js" "Minify" true "Fingerprint" $fingerprint "Defer" "true" | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
+{{- dict "Source" "js/theme.js" "Minify" true "Fingerprint" $fingerprint "Async" "true" | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
 
 {{- with (.Scratch.Get "this").scriptArr -}}
-    {{- delimit . "\n" | dict "Content" | dict "Scratch" $.Scratch "Data" "Defer" "true" | partial "scratch/script.html" -}}
+    {{- delimit . "\n" | dict "Content" | dict "Scratch" $.Scratch "Data" "Async" "true" | partial "scratch/script.html" -}}
 {{- end -}}
 
 {{- range (.Scratch.Get "this").style -}}
