@@ -21,6 +21,16 @@
                                 {{ .Site.Params.company.email }}
                             </a>
                         </li>
+                        <li class="location">
+                            <img src='{{ (resources.Get "svg/location.svg" | minify).RelPermalink }}' alt="" width="15px" height="21.49px">
+                            <p>
+                            {{ .Site.Params.company.address_street }}
+                            {{ .Site.Params.company.address_number }},</br>
+                            {{ .Site.Params.company.address_postal }},
+                            {{ .Site.Params.company.address_city }},</br>
+                            {{ .Site.Params.company.address_country }}
+                            </p>
+                        </li>
                     </ul>
                 </div>
 

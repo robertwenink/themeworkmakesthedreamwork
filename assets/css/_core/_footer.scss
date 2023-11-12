@@ -76,6 +76,18 @@
     a img {
       margin-right: 0.5rem;
       display: inline-block;
+      vertical-align: center;
+    }
+
+    li.location img {
+      vertical-align: top;
+      margin-right: 0.5rem;
+      margin-top: 0.4rem;
+      display: inline-block;
+    }
+
+    li.location p {
+      display: inline-block;
     }
 
     h1 {
