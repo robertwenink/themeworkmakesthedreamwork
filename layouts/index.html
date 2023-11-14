@@ -24,7 +24,9 @@
             {{- if .Site.Params.page.hiddenFromHomePage -}}
                 {{- $pages = where $pages "Params.hiddenfromhomepage" false -}}
             {{- else -}}
-                {{- $pages = where $pages "Params.hiddenfromhomepage" "!=" true -}}
+                {{ if not (and (eq hugo.Environment "development") .Site.IsServer) }}
+                    {{- $pages = where $pages "Params.hiddenfromhomepage" "!=" true -}}
+                {{ end }}
             {{- end -}}
             {{- $pages = .Paginate $pages -}}
             {{- range $pages.Pages -}}

@@ -26,5 +26,5 @@
         </figcaption>
     </figure>
 {{- else -}}
-    {{- partial "plugin/img.html" $options -}}
+    {{- partial "plugin/img.html" $options | safeHTML -}}
 {{- end -}}

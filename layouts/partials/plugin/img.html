@@ -122,7 +122,7 @@
     <picture>
         {{ if $isformat }}
         <source
-        data-srcset="{{ $src_mobile_xsmall | safeURL }} {{ int (mul $w_mobile 0.5) }}w, 
+            data-srcset="{{ $src_mobile_xsmall | safeURL }} {{ int (mul $w_mobile 0.5) }}w, 
             {{ $src_mobile_small | safeURL }} {{ int (mul $w_mobile 0.75) }}w, 
             {{ $src_mobile | safeURL }} {{ int (mul $w_mobile 1) }}w, 
             {{ $src_mobile_large | safeURL }} {{ int (mul $w_mobile 1.5) }}w, 
@@ -131,7 +131,7 @@
             media="(max-width: 680px)"
             {{- end -}} />
         <source
-        data-srcset="{{ $src_small | safeURL }} {{ int (mul $w_page 0.5) }}w, 
+            data-srcset="{{ $src_small | safeURL }} {{ int (mul $w_page 0.5) }}w, 
             {{ $src | safeURL }} {{ int (mul $w_page 1) }}w, 
             {{ $src_large | safeURL }} {{ int (mul $w_page 2) }}w,
             {{ $src_xlarge | safeURL }} {{ int (mul $w_page 3) }}w"
@@ -142,7 +142,7 @@
         <img
             class="lazyload{{ with .Class }} {{ . }}{{ end }}"
             src="{{ $loading.RelPermalink }}"
-            {{- with .SrcMobile -}}data-src="{{ $src_mobile | safeURL }}"{{- else -}}data-src="{{ $src | safeURL }}"{{- end -}}
+            {{ with .SrcMobile -}}data-src="{{ $src_mobile | safeURL }}"{{- else -}}data-src="{{ $src | safeURL }}"{{- end -}}
             {{ if $isformat }} data-sizes="auto", {{ end }}
             alt="{{ $alt }}"
             title="{{ .Title | default $alt }}"

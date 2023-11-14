@@ -1,0 +1,11 @@
+{{ $summary := cond .IsNamedParams (.Get "summary") (.Get 0) }}
+{{ $open := cond .IsNamedParams (.Get "open") (.Get 1) }}
+<div class="details {{ with $open }}open{{ end }}">
+    <div class="details-summary">
+        {{ $summary | markdownify }}
+        </br><i class="details-icon fas fa-angle-right fa-fw collapsable" aria-hidden="true"></i><span class='foldtext'>Click text to fold and unfold section</span>
+    </div>
+    <div class="details-content">
+        <!-- { .Inner | markdownify | safeHTML }}
+    </div> -->
+<!-- </div> -->
