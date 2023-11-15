@@ -122,7 +122,7 @@
 {{- /* mermaid */ -}}
 {{- if (.Scratch.Get "this").mermaid -}}
     {{- $source := $cdn.mermaidJS | default "lib/mermaid/mermaid.min.js" -}}
-    {{- dict "Source" $source "Fingerprint" $fingerprint "Async" "true" | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
+    {{- dict "Source" $source "Fingerprint" $fingerprint "Async" "false" | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
     {{- $_ := (resources.Get "lib/mermaid/mermaid.min.js.map").RelPermalink -}}
 {{- end -}}
 
