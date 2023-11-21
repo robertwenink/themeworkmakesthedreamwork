@@ -1,3 +1,5 @@
-{{- $id := dict "Content" (trim .Inner "\n") "Scratch" .Page.Scratch | partial "function/id.html" -}}
+{{- $id := dict "Content" (trim .Inner "\r\n") "Scratch" .Page.Scratch | partial "function/id.html" -}}
 <div class="mermaid" id="{{ $id }}"></div>
-{{- .Page.Scratch.SetInMap "this" "mermaid" true -}}
+{{- /* use .Store here to remember that this page has mermaid code in it and the js script tag should be loaded */ -}}
+{{- .Page.Store.SetInMap "this" "mermaid" true -}}
+<script>console.log('Mermaid set in map')</script>

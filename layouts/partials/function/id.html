@@ -1,4 +1,5 @@
 {{- /* ID */ -}}
+{{- /* Scratch slaat voor een pagina de variabelen op. Zodra de server gereload wordt, maar niet zozeer de pagina, e.g. css wordt aangepast, dan gaat deze scratch verloren. */ -}}
 {{- $count := (.Scratch.Get "this").count | default 1 -}}
 {{- $id := printf "id-%d" $count -}}
 {{- $count | add 1 | .Scratch.SetInMap "this" "count" -}}

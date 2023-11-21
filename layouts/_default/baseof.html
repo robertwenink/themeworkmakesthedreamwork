@@ -23,7 +23,8 @@
         {{- /* Check theme isDark before body rendering */ -}}
         {{- $theme := .Site.Params.defaulttheme -}}
         <script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('{{ $theme }}' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '{{ $theme }}' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
-    
+        <!-- THIS CALLS THE PRINTING , use later for a printing button: <script type="text/javascript">window.print()</script> -->
+        
         <div id="mask"></div>
 
         {{- /* Body wrapper */ -}}
@@ -31,7 +32,7 @@
             {{- partial "header.html" . -}}
             <main class="main">
                 <div class="container">
-                    {{- block "content" . }}{{ end -}}
+                    {{- block "content" . }}{{- end -}}
                 </div>
             </main>
             {{- partial "footer.html" . -}}
@@ -51,17 +52,6 @@
 
         {{- /* Load JavaScript scripts and CSS */ -}}
         {{- partial "assets.html" . -}}
-    <!-- Netlify / Decap CMS script
-    <script>
-    if (window.netlifyIdentity) {
-        window.netlifyIdentity.on("init", user => {
-        if (!user) {
-            window.netlifyIdentity.on("login", () => {
-            document.location.href = "/admin/";
-            });
-        }
-        });
-    }
-    </script>  -->
+
     </body>
 </html>

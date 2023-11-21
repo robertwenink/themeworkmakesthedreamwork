@@ -147,7 +147,7 @@
             alt="{{ $alt }}"
             title="{{ .Title | default $alt }}"
             {{- with .Id }}id="{{ . }}"{{ end }}
-            style='{{ with $width }}width:{{print . $ext}};{{ end }}{{ with $height }}height:{{print . $ext}};{{ end }}'
+            style='{{ with $width }}width:{{print . $ext}};max-width:{{print . $ext}};{{ end }}{{ with $height }}height:{{print . $ext}};max-height:{{print . $ext}};{{ end }}'
             />
     </picture>
 

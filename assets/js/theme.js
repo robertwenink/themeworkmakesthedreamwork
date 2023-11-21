@@ -82,7 +82,7 @@ var Theme = /*#__PURE__*/function () {
 
     this.config = window.config;
     console.log(window)
-    this.data = this.config.data;
+    this.data = window.config.data;
     this.isDark = document.body.getAttribute('theme') === 'dark';
     this.util = new Util();
     this.newScrollTop = this.util.getScrollTop();
@@ -1067,39 +1067,49 @@ var Theme = /*#__PURE__*/function () {
         console.error(err);
       }
 
+      // All priority and async libraries
+      try{
+        this.initMermaid();
+        console.log("Mermaid loaded");
+      } catch (err) {console.error(err);}
+      try{
+        this.initSearch();
+        console.log("Search loaded");
+      } catch (err) {console.error(err);}
       try{
         this.initMath();
         console.log("Math loaded");
-        this.initSVGIcon();
-        console.log("SVG loaded");
-        this.initTwemoji();
-        // console.log("Twemoji loaded");
-        this.initMenuMobile();
-        console.log("Menu loaded");
-        this.initSwitchTheme();
-        console.log("Switch loaded");
-        this.initSearch();
-        console.log("Search loaded");
+      } catch (err) {console.error(err);}
+      
+      // all pure javascript (or using hugo build-ins) function calls
+      try{
         this.initDetails();
-        console.log("Details loaded");
-        this.initHighlight();
-        console.log("Highlight loaded");
-        this.initMermaid();
-        console.log("Mermaid loaded");
-        this.initTable();
-        console.log("Table? loaded");
+        this.initSVGIcon();
+        this.initMenuMobile();
         this.initHeaderLink();
-        console.log("Headerlink loaded");
-        this.initEcharts();
-        console.log("Echarts loaded");
-        this.initTypeit();
-        console.log("Typeit loaded");
-        this.initMapbox();
-        // console.log("Mapbox loaded");
-        this.initCookieconsent();
-        console.log("Cookieconsent loaded");
+        this.initHighlight();
+        this.initSwitchTheme();
+        this.initTable();
+      } catch (err) {
+        console.error(err);
+      }
+
+      // all defered libaries
+      try {
         this.initLightGallery();
         console.log("Lightgallery loaded");
+        this.initTypeit();
+        console.log("Typeit loaded");
+      } catch (err) {
+        console.error(err);
+      }
+
+      // all not specified or used yet
+      try{
+        this.initTwemoji();
+        this.initEcharts();
+        this.initMapbox();
+        this.initCookieconsent();
       } catch (err) {
         console.error(err);
       }

@@ -1,7 +1,12 @@
+<script>
+    function onloadfinished(src) {
+        console.log(src, "library is loaded")
+    }
+</script>
 {{- with .Content -}}
-    <script type="text/javascript">{{ . | safeJS }}</script>
+    <script type="text/javascript" onload="onloadfinished({{- . -}})">{{ . | safeJS }}</script>
 {{- else -}}
-    {{- if strings.HasPrefix .Source "<script" -}}
+    {{- if strings.HasPrefix .Source "<script onload='onloadfinished({{- $src -}})'" -}}
         {{- safeHTML .Source -}}
     {{- else -}}
         {{- $src := .Source -}}
@@ -36,6 +41,6 @@
         {{- with .Attr -}}
             {{- $attrs = add " " . | add $attrs -}}
         {{- end -}}
-        <script type="text/javascript" {{ $attrs | safeHTMLAttr }}></script>
+        <script type="text/javascript" onload="onloadfinished({{- $src -}})" {{ $attrs | safeHTMLAttr }}></script>
     {{- end -}}
 {{- end -}}
