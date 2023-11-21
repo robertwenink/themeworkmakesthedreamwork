@@ -96,6 +96,23 @@
     {{- $config = dict "strict" false "delimiters" $delimiters | dict "math" | merge $config -}}
 {{- end -}}
 
+{{- /* clipboard.js */ -}}
+{{- $code := $params.code | default dict -}}
+{{- $config = cond (ne $code.maxShownLines nil) $code.maxShownLines 10 | dict "maxShownLines" | dict "code" | merge $config -}}
+
+{{- if ne $code.copy false -}}
+    {{- $source := $cdn.clipboardJS | default "lib/clipboard/clipboard.min.js" -}}
+    {{- dict "Source" $source "Fingerprint" $fingerprint "Async" "true" | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
+    {{- $config = T "copyToClipboard" | dict "copyTitle" | dict "code" | merge $config -}}
+{{- end -}}
+
+{{- /* TypeIt */ -}}
+{{- with (.Scratch.Get "this").typeitMap -}}
+    {{- $typeit := $.Site.Params.typeit -}}
+    {{- $source := $cdn.typeitJS | default "lib/typeit/index.umd.js" -}}
+    {{- dict "Source" $source "Fingerprint" $fingerprint "Async" "true" | dict "Scratch" $.Scratch "Data" | partial "scratch/script.html" -}}
+    {{- $config = dict "speed" $typeit.speed "cursorSpeed" $typeit.cursorSpeed "cursorChar" $typeit.cursorChar "duration" $typeit.duration "data" . | dict "typeit" | merge $config -}}
+{{- end -}}
 
 {{- /* ################# */ -}}
 {{- /* ALL DEFER IMPORTS */ -}}
@@ -120,25 +137,6 @@
     {{- dict "Source" $source "Fingerprint" $fingerprint "Defer" "true" | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
     {{- $config = dict "lightgallery" true | merge $config -}}
 {{- end -}}
-
-{{- /* clipboard.js */ -}}
-{{- $code := $params.code | default dict -}}
-{{- $config = cond (ne $code.maxShownLines nil) $code.maxShownLines 10 | dict "maxShownLines" | dict "code" | merge $config -}}
-
-{{- if ne $code.copy false -}}
-    {{- $source := $cdn.clipboardJS | default "lib/clipboard/clipboard.min.js" -}}
-    {{- dict "Source" $source "Fingerprint" $fingerprint "Defer" "true" | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
-    {{- $config = T "copyToClipboard" | dict "copyTitle" | dict "code" | merge $config -}}
-{{- end -}}
-
-{{- /* TypeIt */ -}}
-{{- with (.Scratch.Get "this").typeitMap -}}
-    {{- $typeit := $.Site.Params.typeit -}}
-    {{- $source := $cdn.typeitJS | default "lib/typeit/index.umd.js" -}}
-    {{- dict "Source" $source "Fingerprint" $fingerprint "Defer" "true" | dict "Scratch" $.Scratch "Data" | partial "scratch/script.html" -}}
-    {{- $config = dict "speed" $typeit.speed "cursorSpeed" $typeit.cursorSpeed "cursorChar" $typeit.cursorChar "duration" $typeit.duration "data" . | dict "typeit" | merge $config -}}
-{{- end -}}
-
 
 {{- /* ########################## */ -}}
 {{- /* ALL NOT SPECIFIED/USED YET */ -}}

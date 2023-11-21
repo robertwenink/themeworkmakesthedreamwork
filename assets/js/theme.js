@@ -1021,9 +1021,7 @@ var Theme = /*#__PURE__*/function () {
             }
 
             _this13.initToc();
-
             _this13.initMermaid();
-
             _this13.initSearch();
           }, 100);
         }
@@ -1116,15 +1114,11 @@ var Theme = /*#__PURE__*/function () {
 
       window.setTimeout(function () {
         _this15.initToc();
-
         _this15.initComment();
-
         _this15.onScroll();
-
         _this15.onResize();
-
         _this15.onClickMask();
-      }, 100);
+      }, 200);
     }
   }]);
 
