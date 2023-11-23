@@ -45,7 +45,10 @@
 }
 
 .section-separator {
-  border-bottom: $global-hr-line #f0f0f0;
+  border-bottom: $global-hr-line $global-font-secondary-color;
+  [theme=dark] & {
+    border-bottom: $global-hr-line $global-font-secondary-color-dark;
+  }
 }
 
 .mermaid {
