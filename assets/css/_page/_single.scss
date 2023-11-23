@@ -49,6 +49,11 @@
     img.lazyloaded {
       width: 100%;
     }
+
+    // required to give the image the correct src set on load!
+    img.lazyload {
+      width: 100%;
+    }
   }
 
   .content {
