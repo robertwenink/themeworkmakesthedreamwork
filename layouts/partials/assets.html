@@ -2,7 +2,9 @@
 {{- $cdn := .Scratch.Get "cdn" | default dict -}}
 {{- $fingerprint := .Scratch.Get "fingerprint" -}}
 {{- $config := (.Scratch.Get "this").config -}}
-
+{{ if (.Store.Get "this").config }}
+    {{- $config = merge $config (.Store.Get "this").config -}}
+{{ end }}
 
 {{- /* ############################ */ -}}
 {{- /* ALL ASYNC / PRIORITY IMPORTS */ -}}
@@ -15,7 +17,8 @@
 
 <script>console.log('Checking for mermaid in map...')</script>
 {{- if (.Store.Get "this").mermaid -}}
-    <script>console.log('Mermaid found in map');console.log({{- (.Store.Get "this") -}})</script>
+    <script>console.log('Mermaid found in map (assets)');
+    console.log({{- (.Store.Get "this") -}})</script>
     {{- $source := $cdn.mermaidJS | default "lib/mermaid/mermaid.min.js" -}}
     {{- dict "Source" $source "Fingerprint" $fingerprint "Async" $mermaid_async | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
     {{- $_ := (resources.Get "lib/mermaid/mermaid.min.js.map").RelPermalink -}}
@@ -53,7 +56,7 @@
 
 {{- /* lazysizes */ -}}
 {{- $source := $cdn.lazysizesJS | default "lib/lazysizes/lazysizes.min.js" -}}
-{{- dict "Source" $source "Fingerprint" $fingerprint "Async" "true" | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
+{{- dict "Source" $source "Fingerprint" $fingerprint "Async" "false" | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
 
 {{- /* KaTeX */ -}}
 {{- $math := $params.math -}}
@@ -110,7 +113,7 @@
 {{- with (.Scratch.Get "this").typeitMap -}}
     {{- $typeit := $.Site.Params.typeit -}}
     {{- $source := $cdn.typeitJS | default "lib/typeit/index.umd.js" -}}
-    {{- dict "Source" $source "Fingerprint" $fingerprint "Async" "true" | dict "Scratch" $.Scratch "Data" | partial "scratch/script.html" -}}
+    {{- dict "Source" $source "Fingerprint" $fingerprint | dict "Scratch" $.Scratch "Data" | partial "scratch/script.html" -}}
     {{- $config = dict "speed" $typeit.speed "cursorSpeed" $typeit.cursorSpeed "cursorChar" $typeit.cursorChar "duration" $typeit.duration "data" . | dict "typeit" | merge $config -}}
 {{- end -}}
 
@@ -215,7 +218,7 @@
     {{- dict "Content" $content "Path" (printf "%v.scss" $path) "ToCSS" $options | dict "Scratch" $.Scratch "Data" | partial "scratch/style.html" -}}
 {{- end -}}
 
-{{- /* Config script */ -}}
+{{- /* Config script: This sets the config to window!!! */ -}}
 {{- $config | jsonify | printf "window.config=%s;" | dict "Content" | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
 
 {{- /* Theme script */ -}}

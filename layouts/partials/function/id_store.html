@@ -1,0 +1,10 @@
+{{- /* ID */ -}}
+{{- /* Scratch slaat voor een pagina de variabelen op. Zodra de server gereload wordt, maar niet zozeer de pagina, e.g. css wordt aangepast, dan gaat deze scratch verloren. */ -}}
+{{- $count := (.Page.Scratch.Get "this").count | default 1 -}}
+{{- $id := printf "id-%d" $count -}}
+{{- $count | add 1 | .Page.Scratch.SetInMap "this" "count" -}}
+{{- /* Count wordt niet meer gebruikt na initiele telling! */ -}}
+{{- with .Content -}}
+    {{- dict $id . | dict "data" | dict "config" | merge ($.Page.Store.Get "this") | $.Page.Store.Set "this" -}}
+{{- end -}}
+{{- return $id -}}
