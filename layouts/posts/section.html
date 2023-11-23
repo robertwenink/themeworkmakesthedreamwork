@@ -92,8 +92,17 @@
         <div class="tag-buttons">
             Filter by category: 
             <button class="button-16">All</button>
-            {{ range .Site.Taxonomies.categories }}
-            <button class="button-16">{{ .Page.Title | humanize }}</button>
+
+            {{ $post_categories := slice }}
+            {{ range .Pages }}
+                {{ range .Params.categories }}
+                    {{ $post_categories = $post_categories | append (. | humanize) }}
+                {{ end }}
+            {{ end }}
+            {{ $post_categories = $post_categories | uniq }}
+            
+            {{ range $post_categories }}
+                <button class="button-16">{{ . }}</button>
             {{ end }}
         </div>
         {{- /* Paginate */ -}}
