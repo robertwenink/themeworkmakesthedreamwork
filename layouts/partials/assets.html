@@ -56,7 +56,7 @@
 
 {{- /* lazysizes */ -}}
 {{- $source := $cdn.lazysizesJS | default "lib/lazysizes/lazysizes.min.js" -}}
-{{- dict "Source" $source "Fingerprint" $fingerprint "Async" "false" | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
+{{- dict "Source" $source "Fingerprint" $fingerprint "Async" false | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
 
 {{- /* KaTeX */ -}}
 {{- $math := $params.math -}}
@@ -66,12 +66,13 @@
     {{- $math = dict "enable" false -}}
 {{- end -}}
 {{- if $math.enable -}}
+    {{ $katexAsync := false }}
     {{- $source := "lib/katex/katex.min.css" | default $cdn.katexCSS -}}
-    {{- dict "Source" $source "Fingerprint" $fingerprint "Async" "true" | dict "Scratch" .Scratch "Data" | partial "scratch/style.html" -}}
+    {{- dict "Source" $source "Fingerprint" $fingerprint "Async" $katexAsync | dict "Scratch" .Scratch "Data" | partial "scratch/style.html" -}}
     {{- $source := $cdn.katexJS | default "lib/katex/katex.min.js" -}}
-    {{- dict "Source" $source "Fingerprint" $fingerprint "Async" "true" | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
+    {{- dict "Source" $source "Fingerprint" $fingerprint "Async" $katexAsync | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
     {{- $source := "lib/katex/contrib/auto-render.min.js" | default $cdn.katexAutoRenderJS -}}
-    {{- dict "Source" $source "Fingerprint" $fingerprint "Async" "true" | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
+    {{- dict "Source" $source "Fingerprint" $fingerprint "Async" $katexAsync | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
     {{- if $math.copyTex -}}
         {{- $source := $cdn.katexCopyTexJS | default "lib/katex/contrib/copy-tex.min.js" -}}
         {{- dict "Source" $source "Fingerprint" $fingerprint "Async" "true" | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
