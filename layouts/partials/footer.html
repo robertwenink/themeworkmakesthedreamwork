@@ -10,25 +10,25 @@
                             <h1>Contact</h1>
                         </li>
                         <li>
-                            <a href="tel:{{ .Site.Params.company.phone }}" class="white">
-                                <img src='{{ (resources.Get "svg/phone.svg" | minify).RelPermalink }}' alt="" width="15px" height="15px">
-                                {{ .Site.Params.company.phone }}                        
+                            <a href="tel:{{- .Site.Params.company.phone -}}" class="white">
+                                <img src='{{- (resources.Get "svg/phone.svg" | minify).RelPermalink -}}' alt="" width="15px" height="15px">
+                                <p>{{- .Site.Params.company.phone -}}</p>                   
                             </a>
                         </li>
                         <li>
-                            <a href="mailto:{{ .Site.Params.company.email }}" class="white">
-                                <img src='{{ (resources.Get "svg/envelope.svg" | minify).RelPermalink }}' alt="" width="15px" height="11.25px">
-                                {{ .Site.Params.company.email }}
+                            <a href="mailto:{{- .Site.Params.company.email -}}" class="white">
+                                <img src='{{- (resources.Get "svg/envelope.svg" | minify).RelPermalink -}}' alt="" width="15px" height="11.25px">
+                                <p>{{- .Site.Params.company.email -}}</p>
                             </a>
                         </li>
                         <li class="location">
-                            <img src='{{ (resources.Get "svg/location.svg" | minify).RelPermalink }}' alt="" width="15px" height="21.49px">
+                            <img src='{{- (resources.Get "svg/location.svg" | minify).RelPermalink -}}' alt="" width="15px" height="21.49px">
                             <p>
-                            {{ .Site.Params.company.address_street }}
+                            {{- .Site.Params.company.address_street }}
                             {{ .Site.Params.company.address_number }},</br>
                             {{ .Site.Params.company.address_postal }},
-                            {{ .Site.Params.company.address_city }},</br>
-                            {{ .Site.Params.company.address_country }}
+                            {{ .Site.Params.company.address_city -}},</br>
+                            {{- .Site.Params.company.address_country -}}
                             </p>
                         </li>
                     </ul>
@@ -41,10 +41,10 @@
                             <h1>Company details</h1>
                         </li>
                         <li>
-                            Chamber of Commerce no. <a href="{{ .Site.Params.company.cocHref }}" rel="noopener noreffer">{{ .Site.Params.company.cocNo }}</a>
+                            <p>Chamber of Commerce no. <a href="{{- .Site.Params.company.cocHref -}}" rel="noopener noreffer">{{- .Site.Params.company.cocNo -}}</a></p>
                         </li>
                         <li>
-                            VAT no. {{ .Site.Params.company.vatNo }}
+                            <p>VAT no. {{ .Site.Params.company.vatNo -}}</p>
                         </li>
                     </ul>
                 </div>
@@ -55,13 +55,13 @@
                         <li>
                             <h1>Links</h1>
                         </li>
-                        {{ with .Site.Params.company.cvLocation }}
+                        {{- with .Site.Params.company.cvLocation -}}
                         <li>
-                            <a href="{{ . }}" rel="noopener noreffer">
-                                Curriculum Vitae
+                            <a href="{{- . -}}" rel="noopener noreffer">
+                                <p>Curriculum Vitae</p>
                             </a>
                         </li>
-                        {{ end }}
+                        {{- end -}}
                     </ul>
                 </div>
                 {{- end -}}
@@ -71,8 +71,8 @@
             <div class="bottom-container">
                 <div class="left-bottom-container">
                     {{- if ne .Site.Params.footer.company false -}}
-                        <a href="{{ .Site.Params.company.termsConditionsFile }}" target='_blank' rel="noopener noreffer">Terms &amp; Conditions</a>
-                    {{ end }}
+                        <a href="{{- .Site.Params.company.termsConditionsFile -}}" target='_blank' rel="noopener noreffer">Terms &amp; Conditions</a>
+                    {{- end -}}
 
                     <div class="copyright" itemscope itemtype="http://schema.org/CreativeWork">
                         {{- /* Copyright year */ -}}
@@ -80,16 +80,16 @@
                             <i class="far fa-copyright fa-fw" aria-hidden="true"></i>&nbsp;
                             {{- with .Site.Params.footer.since -}}
                                 <span itemprop="copyrightYear">
-                                    {{- if lt . now.Year }}{{ . }} - {{ end }}{{ now.Year -}}
+                                    {{- if lt . now.Year -}}{{- . -}} - {{- end -}}{{- now.Year -}}
                                 </span>
                             {{- else -}}
-                                <span itemprop="copyrightYear">{{ now.Year }}</span>
+                                <span itemprop="copyrightYear">{{- now.Year -}}</span>
                             {{- end -}}
                         {{- end -}}
 
                         {{- /* Author */ -}}
                         {{- if ne .Site.Params.footer.author false -}}
-                            <span class="author" itemprop="copyrightHolder">&nbsp;<a href="{{ $.Site.Author.link | default .Site.Home.RelPermalink }}" target="_blank">{{ .Site.Author.name }}</a></span>
+                            <span class="author" itemprop="copyrightHolder">&nbsp;<a href="{{- $.Site.Author.link | default .Site.Home.RelPermalink -}}" target="_blank">{{- .Site.Author.name -}}</a></span>
                         {{- end -}}
                     </div>
                 </div>
@@ -104,7 +104,7 @@
                     {{- if ne .Site.Params.footer.hugo false -}}
                             {{- $hugo := printf `<a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo %v">Hugo</a>` hugo.Version -}}
                             {{- $theme := .Scratch.Get "version" | printf `<a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt %v"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>` -}}
-                            {{- dict "Hugo" $hugo "Theme" $theme | T "poweredBySome" | safeHTML }}
+                            {{- dict "Hugo" $hugo "Theme" $theme | T "poweredBySome" | safeHTML -}}
                     {{- end -}}
                 </div>
             </div>
@@ -112,7 +112,7 @@
 
         {{- /* License */ -}}
         {{- with .Site.Params.footer.license -}}
-            &nbsp;|&nbsp;<span class="license">{{ . | safeHTML }}</span>
+            &nbsp;|&nbsp;<span class="license">{{- . | safeHTML -}}</span>
         {{- end -}}
 
     </footer>
