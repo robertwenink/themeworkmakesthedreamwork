@@ -7,7 +7,7 @@
 
 <!-- {{/*  set up paged.js polyfill to preview the print version  */}} -->
 {{ $pagedjs := resources.Get "/lib/pagedjs/paged.polyfill.min.js" | resources.Fingerprint "md5" }}
-<script src="{{ $pagedjs.Permalink }}" type="module" type="application/javascript"></script>
+<script src="{{ $pagedjs.Permalink }}" type="module" type="application/javascript" defer></script>
 
 <script>
     window.PagedConfig = {
