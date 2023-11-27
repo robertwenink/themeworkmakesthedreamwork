@@ -1,13 +1,15 @@
 {{ $interface := resources.Get "/lib/pagedjs/interface.css" | minify  | resources.Fingerprint "md5" }}
-<link rel="stylesheet" href="{{ $interface.Permalink }}" integrity="{{ $interface.Data.Integrity }}">
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ $interface.Permalink }}" integrity="{{ $interface.Data.Integrity }}">
+<noscript><link rel="stylesheet" href="{{ $interface.Permalink }}" integrity="{{ $interface.Data.Integrity }}"></noscript>
 
 <!-- Not clear what this is supposed to do -->
 {{ $print := resources.Get "/lib/pagedjs/print.css" | minify  | resources.Fingerprint "md5" }}
-<link rel="stylesheet" href="{{ $print.Permalink }}" integrity="{{ $print.Data.Integrity }}">
+<link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="{{ $print.Permalink }}" integrity="{{ $print.Data.Integrity }}">
+<noscript><link rel="stylesheet" href="{{ $print.Permalink }}" integrity="{{ $print.Data.Integrity }}"></noscript>
 
 <!-- {{/*  set up paged.js polyfill to preview the print version  */}} -->
 {{ $pagedjs := resources.Get "/lib/pagedjs/paged.polyfill.min.js" | resources.Fingerprint "md5" }}
-<script src="{{ $pagedjs.Permalink }}" type="module" type="application/javascript" defer></script>
+<script src="{{ $pagedjs.Permalink }}" type="module" type="application/javascript" async></script>
 
 <script>
     window.PagedConfig = {
