@@ -18,23 +18,23 @@ $global-line-height: 1.5rem !default;
 
 // Color of the background
 $global-background-color: #fff !default;
-$global-background-color-dark: #292a2d !default;
+$global-background-color-dark: #292929 !default;
 
 // Color of the text
-$global-font-color: #161209 !default;
-$global-font-color-dark: #a9a9b3 !default;
+$global-font-color: #161616 !default;
+$global-font-color-dark: #B5B5B6 !default;
 
 // Color of the secondary text
-$global-font-secondary-color: #757585 !default; // was a9a9b3 voor de lichte
-$global-font-secondary-color-dark: #5d5d5f !default;
+$global-font-secondary-color: #595959 !default; // was a9a9b3 voor de lichte
+$global-font-secondary-color-dark: #949494 !default;
 
 // Color of the link
-$global-link-color: #161209 !default;
-$global-link-color-dark: #a9a9b3 !default;
+$global-link-color: $global-font-color !default;
+$global-link-color-dark: $global-font-color-dark !default;
 
 // Color of the hover link
 $global-link-hover-color: #237795 !default; // was 2784a5
-$global-link-hover-color-dark: #fff !default;
+$global-link-hover-color-dark: #f0f0f0 !default;
 
 // Color of the border
 $global-border-color: #f0f0f0 !default;
@@ -44,10 +44,10 @@ $global-hr-line: 2px dashed;
 
 // ========== Scrollbar ========== //
 // Color of the scrollbar
-$scrollbar-color: #87878d !default;
+$scrollbar-color: #878787 !default;
 
 // Color of the hover scrollbar
-$scrollbar-hover-color: #757585 !default;
+$scrollbar-hover-color: #595959 !default;
 // ========== Scrollbar ========== //
 
 // ========== Selection ========== //
@@ -66,11 +66,11 @@ $header-title-font-size: 1.5rem !default;
 
 // Color of the header background
 $header-background-color: #f8f8f8 !default;
-$header-background-color-dark: #252627 !default;
+$header-background-color-dark: #252525 !default;
 
 // Color of the hover header item
-$header-hover-color: #161209 !default;
-$header-hover-color-dark: #fff !default;
+$header-hover-color: $global-font-color !default;
+$header-hover-color-dark: $global-link-hover-color-dark !default;
 
 // Color of the search background
 $search-background-color: #e9e9e9 !default;
@@ -83,16 +83,16 @@ $toc-title-font-size: 1.2rem !default;
 $toc-content-font-size: 1rem !default;
 
 // Color of the single link
-$single-link-color: #237795 !default;
+$single-link-color: $global-link-hover-color !default;
 $single-link-color-dark: #55bde2 !default;
 
 // Color of the hover single link
-$single-link-hover-color: #ef3982 !default;
+$single-link-hover-color: #AD1351 !default;
 $single-link-hover-color-dark: #bdebfc !default;
 
 // Color of the table background
-$table-background-color: #fff !default;
-$table-background-color-dark: #272c34 !default;
+$table-background-color: $header-background-color !default;
+$table-background-color-dark: $header-background-color-dark !default;
 
 // Color of the table thead
 $table-thead-color: #ededed !default;
@@ -105,12 +105,12 @@ $blockquote-color-dark: #59c5ec !default;
 
 // ========== Pagination ========== //
 // Color of the link in pagination
-$pagination-link-color: #237795 !default;
-$pagination-link-color-dark: #a9a9b3 !default;
+$pagination-link-color: $global-link-hover-color !default;
+$pagination-link-color-dark: $global-font-secondary-color !default;
 
 // Color of the hover link in pagination
 $pagination-link-hover-color: #000 !default;
-$pagination-link-hover-color-dark: #fff !default;
+$pagination-link-hover-color-dark: $global-link-hover-color-dark !default;
 // ========== Pagination ========== //
 
 // ========== Code ========== //
@@ -267,7 +267,7 @@ $code-highlight-color-map: (
 
 /*#region*/
 // $code-highlight-color-map-dark: (
-//   /* Parentheses */ "p": #a9a9b3,
+//   /* Parentheses */ "p": $global-font-secondary-color,
 //   /* Keyword */ "k": #d371e3,
 //   /* KeywordConstant */ "kc": #d371e3,
 //   /* KeywordDeclaration */ "kd": #d371e3,
@@ -288,7 +288,7 @@ $code-highlight-color-map: (
 //   /* NameFunctionMagic */ "fm": #19b9c4,
 //   /* NameLabel */ "nl": #41b0f5,
 //   /* NameNamespace */ "nn": #41b0f5,
-//   /* NameOther */ "nx": #a9a9b3,
+//   /* NameOther */ "nx": $global-font-secondary-color,
 //   /* NameProperty */ "py": #41b0f5,
 //   /* NameTag */ "nt": #41b0f5,
 //   /* NameVariable */ "nv": #41b0f5,
@@ -371,7 +371,7 @@ $code-highlight-color-map-dark: (
   /* NameFunctionMagic */ "fm": #19b9c4,
   /* NameLabel */ "nl": #41b0f5,
   /* NameNamespace */ "nn": #4EC9B0, //changed
-  /* NameOther */ "nx": #a9a9b3,
+  /* NameOther */ "nx": $global-font-secondary-color,
   /* NameProperty */ "py": #41b0f5,
   /* NameTag */ "nt": #41b0f5,
   /* NameVariable */ "nv": #41b0f5,
