@@ -275,10 +275,18 @@
       }
     }
 
+    // img {
+    //   // width: 100%;
+    //   max-width: 100%;
+    //   min-height: 1em;
+    // }
+
     img {
-      // width: 100%;
-      max-width: 100%;
-      min-height: 1em;
+      display: block;
+      width: 100%;
+      height: auto;
+      margin: 0 auto;
+      overflow: hidden;
     }
 
     figure {
@@ -293,14 +301,6 @@
         margin: 0 auto;
         font-size: .875rem;
         color: #969696;
-      }
-
-      img {
-        display: block;
-        width: 100%;
-        height: auto;
-        margin: 0 auto;
-        overflow: hidden;
       }
     }
 
