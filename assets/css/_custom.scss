@@ -1,6 +1,14 @@
 // ==============================
 // Custom style
 // ==============================
+
+div#expertises_table {
+    border:  1px solid $global-font-secondary-color-dark;
+    [theme=dark] & {
+        border:  1px solid $global-font-secondary-color;
+    }
+}
+
 .home {
     .home-profile {
         img {
