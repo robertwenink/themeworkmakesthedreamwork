@@ -1080,6 +1080,11 @@ var Theme = /*#__PURE__*/function () {
         console.log("Math loaded");
       } catch (err) {console.error(err);}
       
+      try{
+        this.initCookieconsent();
+        console.log("Cookieconsent loaded");
+      } catch (err) {console.error(err);}
+
       // all pure javascript (or using hugo build-ins) function calls
       try{
         this.initDetails();
@@ -1108,7 +1113,6 @@ var Theme = /*#__PURE__*/function () {
         this.initTwemoji();
         this.initEcharts();
         this.initMapbox();
-        this.initCookieconsent();
       } catch (err) {
         console.error(err);
       }

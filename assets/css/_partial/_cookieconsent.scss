@@ -1,17 +1,38 @@
 .cc-window.cc-banner {
+  // same color as the location mail phone svg icons, already seemed to be the standard, but setting explicitly!
+  background-color: #0da9ff !important;
+
   .cc-btn {
     color: $global-font-color;
+    background-color: $header-background-color;
 
     &:hover, &:focus {
-      background-color: #ccc;
+      background-color: $search-background-color;
     }
 
     [theme=dark] & {
       color: $global-font-color;
+      background-color: $header-background-color;
 
       &:hover, &:focus {
-        background-color: #fff;
+        background-color: $search-background-color;
       }
     }
   }
 }
+
+.cc-window.cc-message {
+  .cc-btn {
+    color: $global-font-color;
+
+    [theme=dark] & {
+      color: $global-font-color-dark;
+    }
+  }
+}
+
+// // for testing
+// .cc-window.cc-invisible {
+//   opacity: 100 !important;
+//   display: inline-flex !important;
+// }

@@ -11,7 +11,6 @@
 {{- /* ############################ */ -}}
 
 {{- /* mermaid */ -}}
-
 {{- /* mermaid will not render on load, but needs to be called explicitly! So, better to load with priority */ -}}
 {{- $mermaid_async := false -}}
 
@@ -118,6 +117,18 @@
     {{- $config = dict "speed" $typeit.speed "cursorSpeed" $typeit.cursorSpeed "cursorChar" $typeit.cursorChar "duration" $typeit.duration "data" . | dict "typeit" | merge $config -}}
 {{- end -}}
 
+{{- /* Cookie Consent */ -}}
+{{- if .Site.Params.cookieconsent | and .Site.Params.cookieconsent.enable -}}
+    {{- $source := $cdn.cookieconsentCSS | default "lib/cookieconsent/cookieconsent.min.css" -}}
+    {{- dict "Source" $source "Fingerprint" $fingerprint "Async" "true" | dict "Scratch" .Scratch "Data" | partial "scratch/style.html" -}}
+    {{- $source := $cdn.cookieconsentJS | default "lib/cookieconsent/cookieconsent.min.js" -}}
+    {{- dict "Source" $source "Fingerprint" $fingerprint "Async" "true" | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
+    {{- $cookieconsentConfig := dict "popup" (dict "background" "#1aa3ff") "button" (dict "background" "#f0f0f0") | dict "theme" "edgeless" "palette" -}}
+    {{- $cookieconsentConfig = .Site.Params.cookieconsent | merge $cookieconsentConfig -}}
+    {{- $cookieconsentConfig = dict "message" ($cookieconsentConfig.content.message | default (T "cookieconsentMessage")) "dismiss" ($cookieconsentConfig.content.dismiss | default (T "cookieconsentDismiss")) "link" ($cookieconsentConfig.content.link | default (T "cookieconsentLink")) | dict "content" | merge $cookieconsentConfig -}}
+    {{- $config = $cookieconsentConfig | dict "cookieconsent" | merge $config -}}
+{{- end -}}
+
 {{- /* ################# */ -}}
 {{- /* ALL DEFER IMPORTS */ -}}
 {{- /* ################# */ -}}
@@ -184,18 +195,6 @@
     {{- /* MetingJS */ -}}
     {{- $source := $cdn.metingJS | default "lib/meting/Meting.min.js" -}}
     {{- dict "Source" $source "Fingerprint" $fingerprint "Async" "true" | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
-{{- end -}}
-
-{{- /* Cookie Consent */ -}}
-{{- if .Site.Params.cookieconsent | and .Site.Params.cookieconsent.enable -}}
-    {{- $source := $cdn.cookieconsentCSS | default "lib/cookieconsent/cookieconsent.min.css" -}}
-    {{- dict "Source" $source "Fingerprint" $fingerprint | dict "Scratch" .Scratch "Data" | partial "scratch/style.html" -}}
-    {{- $source := $cdn.cookieconsentJS | default "lib/cookieconsent/cookieconsent.min.js" -}}
-    {{- dict "Source" $source "Fingerprint" $fingerprint | dict "Scratch" .Scratch "Data" | partial "scratch/script.html" -}}
-    {{- $cookieconsentConfig := dict "popup" (dict "background" "#1aa3ff") "button" (dict "background" "#f0f0f0") | dict "theme" "edgeless" "palette" -}}
-    {{- $cookieconsentConfig = .Site.Params.cookieconsent | merge $cookieconsentConfig -}}
-    {{- $cookieconsentConfig = dict "message" ($cookieconsentConfig.content.message | default (T "cookieconsentMessage")) "dismiss" ($cookieconsentConfig.content.dismiss | default (T "cookieconsentDismiss")) "link" ($cookieconsentConfig.content.link | default (T "cookieconsentLink")) | dict "content" | merge $cookieconsentConfig -}}
-    {{- $config = $cookieconsentConfig | dict "cookieconsent" | merge $config -}}
 {{- end -}}
 
 
