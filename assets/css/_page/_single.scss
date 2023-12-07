@@ -275,15 +275,18 @@
       }
     }
 
-    // img {
-    //   // width: 100%;
-    //   max-width: 100%;
-    //   min-height: 1em;
-    // }
-
+    // this is relevant for images seperately placed in the body, like images in mermaid.
     img {
+      // width: 100%;
+      max-width: 100%;
+      min-height: 1em;
+    }
+
+    // for images added through the image shortcode
+    picture img, figure img {
       display: block;
       width: 100%;
+      max-width: 100%;
       height: auto;
       margin: 0 auto;
       overflow: hidden;
@@ -300,7 +303,10 @@
         padding: .5rem;
         margin: 0 auto;
         font-size: .875rem;
-        color: #969696;
+        color: $global-font-secondary-color;
+        [theme=dark] & {
+          color: $global-font-secondary-color-dark;
+        }
       }
     }
 
