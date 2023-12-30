@@ -1,0 +1,13 @@
+<!-- {{ .Site.Params.company.tradename }} (herafter referred to as {{ .Site.Params.company.tradename_short }})<br/> -->
+{{ .Site.Params.baseURL }}
+<a href="mailto:{{- .Site.Params.company.email -}}" class="white">
+    {{ .Site.Params.company.email }}
+</a></br>
+<a href="tel:{{- .Site.Params.company.phone -}}">
+    {{- .Site.Params.company.phone -}}
+</a></br>
+{{- .Site.Params.company.address_street }}
+{{ .Site.Params.company.address_number }},</br>
+{{ .Site.Params.company.address_postal }},
+{{ .Site.Params.company.address_city -}}, 
+{{ .Site.Params.company.address_country -}}
