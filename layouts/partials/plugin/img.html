@@ -29,11 +29,11 @@
 {{ $isformat := in (slice ".jpg" ".jpeg" ".png" ".tiff" ".tif") (path.Ext .Src) }}
 
 {{- with dict "Path" $src "Resources" .Resources | partial "function/resource.html" -}}
-        <!-- .Width and .Height are the original image dimensions here. 
+    {{ if $isformat }}
+            <!-- .Width and .Height are the original image dimensions here. 
             Resize only used to change the file formatting, not to change size! (original sizes used).
             Provided width and height are purely for styling convenience. -->
         <!-- {{ printf "%#v" .Width }} -->
-    {{ if $isformat }}
         {{- with .Resize (printf "%dx%d%s" .Width .Height " webp") -}}
             {{- $src_org = .RelPermalink -}}
         {{- end -}}
@@ -57,9 +57,13 @@
     <!-- Set the sizes here, default to the width of the image if no html width has been given
         .Width and .Height are the original image dimensions here.
         If no heights were passed in the shortcode, no style is applied -->
-    {{ if or (ne $width "") (ne $height "") }}        
-        {{ $aspect := div .Height (float .Width) }}
-        
+    {{ if or (ne $width "") (ne $height "") }}
+        {{ $aspect := 1 }}
+        {{ if $isformat }} 
+            <!-- .Width etc not supported for svg -->
+            {{ $aspect = div .Height (float .Width) }}            
+        {{ end }}
+
         {{ if and (ne $width "") (ne $height "") }}
             <!-- Select and use smallest size -->
             {{ $fwidth := (float $width | default 1) }}
