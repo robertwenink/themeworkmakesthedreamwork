@@ -162,7 +162,7 @@
       font-weight: bold;
 
       [theme=dark] & {
-        color: #ddd;
+        color: $global-link-hover-color-dark;
       }
     }
 
@@ -237,7 +237,7 @@
         }
 
         th, td {
-          padding: .3rem 0.6rem;
+          padding: .3rem 1rem;
           border: 1px solid darken($table-thead-color, 2%);
 
           [theme=dark] & {

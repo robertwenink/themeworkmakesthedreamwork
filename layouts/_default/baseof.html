@@ -15,10 +15,10 @@
         <!-- <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script> -->
         
         {{- partial "plugin/bootstrap.html" . -}}
+        {{- partial "plugin/pagedjs.html" . -}}
         {{- partial "head/meta.html" . -}}
         {{- partial "head/link.html" . -}}
         {{- partial "head/seo.html" . -}}
-        {{- partial "plugin/pagedjs.html" . -}}
     </head>
     <body data-header-desktop="{{ .Site.Params.header.desktopMode }}" data-header-mobile="{{ .Site.Params.header.mobileMode }}">
         {{- /* Check theme isDark before body rendering */ -}}
@@ -32,7 +32,7 @@
         <div class="wrapper">
             {{- partial "header.html" . -}}
             <main class="main">
-                <div class="container">
+                <div class="site-container">
                     {{- block "content" . }}{{- end -}}
                 </div>
             </main>

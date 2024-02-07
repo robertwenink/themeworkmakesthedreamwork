@@ -182,35 +182,44 @@ img#python {
 
 
 
+svg.svg_icon {
+    fill : $global-font-color;
+    [theme=dark] & {
+        fill: $global-font-secondary-color-dark;
+    }
+}
+
+@media (max-width: 780px) {
+    .order-md-1,
+    .order-md-2 {
+        order: 0; /* Reset the order for mobile */
+    }
+    .col-md-3 {
+        width: 30%;
+    }
+}
 
 
-
-
-
-
-
-
-
-
-
-
+// special blockquotes
 .single .content blockquote.services {
     //to override the default
     display: inherit;
+    position: relative;
     border: none;
-    background-color: whitesmoke;
-    padding: 0;
-    // margin: 0;
+
+    background-color: $global-background-color;
+    color: $global-font-secondary-color;
+    [theme=dark] & {
+        color: $global-font-secondary-color-dark;
+        background-color: $global-background-color-dark;
+    }
 
     // to set it here
     font-family: Georgia, serif;
     font-size: 17.5px;
     font-style: italic;
-    width: 100%;
+
     padding: 1rem 30px 1rem 30px;
-    line-height: 1.45;
-    position: relative;
-    color: #383838;
     }
     
 blockquote.services:before {
@@ -219,9 +228,8 @@ blockquote.services:before {
     content: "\201C";
     font-size: 60px;
     position: absolute;
-    left: -14px;
+    left: -12px;
     top: -5px;
-    color: #7a7a7a;
     }
 
 blockquote.services:after {
@@ -230,13 +238,15 @@ blockquote.services:after {
     content: "\201D";
     font-size: 60px;
     position: absolute;
-    right: 0px;
+    right: 5px;
     bottom: -35px;
-    color: #7a7a7a;
     }
     
 blockquote.services cite {
-    color: #999999;
+    color: $global-font-secondary-color;
+    [theme=dark] & {
+        color: $global-font-secondary-color-dark;
+    }
     font-size: 14px;
     display: block;
     margin-top: 5px;
