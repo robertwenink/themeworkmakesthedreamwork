@@ -26,7 +26,7 @@ div#expertises_table {
 .single .content .wrap-around {
     display: inline-block;
     width: 100%;
-    
+    margin-bottom: 0.75rem;
     img {
         float: left;
         margin: 0.5rem 2.5% 2.5% 0; //0.5rem is perfect de text spacing
@@ -46,20 +46,6 @@ div#expertises_table {
 
     a, div {
         height: max-content;
-    }
-}
-
-.service {
-    margin: 1.5rem 0;
-}
-
-.single .content .wrap-around.right {
-    img {
-        float: right;
-        margin: auto 0 2.5% 2.5%; //0.5rem is perfect de text spacing
-    }
-    p {
-        text-align: left;
     }
 }
 
@@ -96,7 +82,7 @@ img#python {
 #pf_home {
     max-width: 100%;
     width: 100%;
-    height: 16rem;
+    height: 17rem;
     object-fit: cover;
     margin: 0;
 }
@@ -217,7 +203,7 @@ svg.svg_icon {
 
     // to set it here
     font-family: Georgia, serif;
-    font-size: 17.5px;
+    font-size: 18px;
     font-style: italic;
 
     padding: 1rem 30px 1rem 30px;
