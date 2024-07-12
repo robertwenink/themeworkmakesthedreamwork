@@ -1,21 +1,20 @@
 {{- /* lazysizes and lightgallery */ -}}
-{{- $src_org := .Src -}}
-{{- $src_small := .Src -}}
 {{- $src := .Src -}}
+
+{{- $src_small := .Src -}}
 {{- $src_large := .Src -}}
 {{- $src_xlarge := .Src -}}
 
 {{- $src_mobile_xsmall := .SrcMobile | default $src -}}
-{{- $src_mobile_small := .SrcMobile | default $src -}}
 {{- $src_mobile := .SrcMobile | default $src -}}
-{{- $src_mobile_large := .SrcMobile | default $src -}}
 {{- $src_mobile_xlarge := .SrcMobile | default $src -}}
 
 <!-- Set width for mobile media boundary and typical pagewidth -->
-{{- $w_mobile := sub 680 32 -}} <!-- taking 2rem (=32px) margin total into account -->
+<!-- {{- $w_mobile := sub 680 32 -}} taking 2rem (=32px) margin total into account -->
+{{- $w_mobile := 680 -}}
 {{- $w_page := 800 -}}
 
-<!-- .Width and .Height are the named parameters here -->
+<!-- .Width and .Height are the named parameters heren (as opposed to the original image dimensions) -->
 {{ $cutset := "ptxrem%inc vhw" }}
 {{ $width := strings.TrimRight $cutset .Width }}
 {{ $width_ext := strings.TrimLeft $width .Width }}
@@ -25,27 +24,55 @@
 {{ $height := strings.TrimRight $cutset .Height }}
 {{ $height_ext := strings.TrimLeft $height .Height }}
 
+{{ $aspect := 1 }}
+
 <!-- Only transform some extension, and not e.g. svg -->
 {{ $isformat := in (slice ".jpg" ".jpeg" ".png" ".tiff" ".tif") (path.Ext .Src) }}
 
+<!-- EXIF orientation correction -->
+ <!-- https://sirv.com/help/articles/rotate-photos-to-be-upright/#EXIF_orientation_values -->
+{{ $rotation := "" }}
 {{- with dict "Path" $src "Resources" .Resources | partial "function/resource.html" -}}
+    {{ with .Exif }}
+        {{ $orientation := .Tags.Orientation }}
+        {{ if eq $orientation 1 }}
+            <!-- Do nothing, normal upright orientation -->
+            {{ $rotation = "" }}
+        {{ else if (eq $orientation 3) }}
+            <!-- Image upside down, rotate 180 -->
+            {{ $rotation = " r180" }}
+        {{ else if (eq $orientation 6) }}
+            <!-- Rotate the image 90deg CW (.Resize "r270") -->
+            {{ $rotation = " r270" }}
+        {{ else if (eq $orientation 8) }}
+            <!-- Rotate the image 90deg CCW (.Resize "r90") -->
+            {{ $rotation = " r90" }}
+        {{ end }}
+    {{ end }}
+{{ end }}
+
+{{- with dict "Path" $src "Resources" .Resources | partial "function/resource.html" -}}
+    <!-- .Width etc not supported for svg -->
     {{ if $isformat }}
+        <!-- Define the aspect ratio of the original image -->
+        {{ $aspect = div .Height (float .Width) }}   
+
             <!-- .Width and .Height are the original image dimensions here. 
             Resize only used to change the file formatting, not to change size! (original sizes used).
             Provided width and height are purely for styling convenience. -->
         <!-- {{ printf "%#v" .Width }} -->
-        {{- with .Resize (printf "%dx%d%s" .Width .Height " webp") -}}
-            {{- $src_org = .RelPermalink -}}
-        {{- end -}}
-        {{- with .Resize (printf "%dx%s" (cond (ge .Width (int (mul $w_page 0.5))) (int (mul $w_page 0.5)) .Width) " webp") -}}
+        {{- with .Fit (printf "%dx%d%s%s" (cond (ge .Width (int (mul $w_page 0.5))) (int (mul $w_page 0.5)) .Width) (cond (ge .Width (int (mul $w_page 0.5))) (int (mul $w_page 0.5 $aspect)) .Height) " webp" $rotation) -}}
             {{- $src_small = .RelPermalink -}}
         {{- end -}}
-        {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_page 1)) (mul $w_page 1) .Width) " webp") -}}
+        
+        {{- with .Fit (printf "%dx%d%s%s" (cond (ge .Width (mul $w_page 1)) (mul $w_page 1) .Width) (cond (ge .Width (mul $w_page 1)) (int (mul $w_page 1 $aspect)) .Height) " webp" $rotation) -}}
             {{- $src = .RelPermalink -}}
         {{- end -}}
-        {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_page 2)) (mul $w_page 2) .Width) " webp") -}}
+        
+        {{- with .Fit (printf "%dx%d%s%s" (cond (ge .Width (mul $w_page 2)) (mul $w_page 2) .Width) (cond (ge .Width (mul $w_page 2)) (int (mul $w_page 2 $aspect)) .Height) " webp" $rotation) -}}
             {{- $src_large = .RelPermalink -}}
-        {{- end -}}    
+        {{- end -}}   
+
         {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_page 3)) (mul $w_page 3) .Width) " webp") -}}
             {{- $src_xlarge = .RelPermalink -}}
         {{- end -}}
@@ -58,12 +85,6 @@
         .Width and .Height are the original image dimensions here.
         If no heights were passed in the shortcode, no style is applied -->
     {{ if or (ne $width "") (ne $height "") }}
-        {{ $aspect := 1 }}
-        {{ if $isformat }} 
-            <!-- .Width etc not supported for svg -->
-            {{ $aspect = div .Height (float .Width) }}            
-        {{ end }}
-
         {{ if and (ne $width "") (ne $height "") }}
             <!-- Select and use smallest size -->
             {{ $fwidth := (float $width | default 1) }}
@@ -96,19 +117,13 @@
 <!-- Set the mobile sources if passed -->
 {{ if $isformat }}
     {{- with dict "Path" $src_mobile "Resources" .Resources | partial "function/resource.html" -}}
-        {{- with .Resize (printf "%dx%s" (cond (ge .Width (int (mul $w_mobile 0.5))) (int (mul $w_mobile 0.5)) .Width) " webp") -}}
+        {{- with .Fit (printf "%dx%d%s%s" (cond (ge .Width (int (mul $w_mobile 0.5))) (int (mul $w_mobile 0.5)) .Width) (cond (ge .Width (int (mul $w_mobile 0.5))) (int (mul $w_mobile 0.5 $aspect)) .Height) " webp" $rotation) -}}
             {{- $src_mobile_xsmall = .RelPermalink -}}
         {{- end -}}
-        {{- with .Resize (printf "%dx%s" (cond (ge .Width (int (mul $w_mobile 0.75))) (int (mul $w_mobile 0.75)) .Width) " webp") -}}
-            {{- $src_mobile_small = .RelPermalink -}}
-        {{- end -}}
-        {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_mobile 1)) (mul $w_mobile 1) .Width) " webp") -}}
+        {{- with .Fit (printf "%dx%d%s%s" (cond (ge .Width (mul $w_mobile 1)) (mul $w_mobile 1) .Width) (cond (ge .Width (mul $w_mobile 1)) (int (mul $w_mobile 1 $aspect)) .Height) " webp" $rotation) -}}
             {{- $src_mobile = .RelPermalink -}}
         {{- end -}}
-        {{- with .Resize (printf "%dx%s" (cond (ge .Width (int (mul $w_mobile 1.5))) (int (mul $w_mobile 1.5)) .Width) " webp") -}}
-            {{- $src_mobile_large = .RelPermalink -}}
-        {{- end -}} 
-        {{- with .Resize (printf "%dx%s" (cond (ge .Width (mul $w_mobile 2)) (mul $w_mobile 2) .Width) " webp") -}}
+        {{- with .Fit (printf "%dx%d%s%s" (cond (ge .Width (mul $w_mobile 2)) (mul $w_mobile 2) .Width) (cond (ge .Width (mul $w_mobile 2)) (int (mul $w_mobile 2 $aspect)) .Height) " webp" $rotation) -}}
             {{- $src_mobile_xlarge = .RelPermalink -}}
         {{- end -}}
     {{- end -}}
@@ -119,20 +134,19 @@
 
 {{- $loading := resources.Get "svg/loading.svg" | minify -}}
 
+<!-- Gebruik bij { with .Title } { with .Caption } and .Caption daarbinnen als je de caption wilt laten zien ipv image title -->
 {{- if .Linked -}}
-    <a class="lightgallery" href="{{ $src_org | safeURL }}" title="{{ .Title | default $alt }}" data-thumbnail="{{ $src_small | safeURL }}"{{ with .Caption }} data-sub-html="<h2>{{ . }}</h2>{{ with $.Title }}<p>{{ . }}</p>{{ end }}"{{ end }}{{ with .Rel }} rel="{{ . }}"{{ end }}>
+    <a class="lightgallery" href="{{ $src_xlarge | safeURL }}" title="{{ .Title | default $alt }}" data-thumbnail="{{ $src_small | safeURL }}"{{ with .Title }} data-sub-html="<h2>{{ . }}</h2>{{ with $.Title }}<p>{{ . }}</p>{{ end }}"{{ end }}{{ with .Rel }} rel="{{ . }}"{{ end }}>
 {{- end -}}
 
     <picture>
         {{ if $isformat }}
         <source
             data-srcset="{{ $src_mobile_xsmall | safeURL }} {{ int (mul $w_mobile 0.5) }}w, 
-            {{ $src_mobile_small | safeURL }} {{ int (mul $w_mobile 0.75) }}w, 
             {{ $src_mobile | safeURL }} {{ int (mul $w_mobile 1) }}w, 
-            {{ $src_mobile_large | safeURL }} {{ int (mul $w_mobile 1.5) }}w, 
             {{ $src_mobile_xlarge | safeURL }} {{ int (mul $w_mobile 2) }}w"
             {{- with .SrcMobile -}}
-            media="(max-width: 680px)"
+            media="(max-width: 767.8px)"
             {{- end -}} />
         <source
             data-srcset="{{ $src_small | safeURL }} {{ int (mul $w_page 0.5) }}w, 
@@ -140,13 +154,13 @@
             {{ $src_large | safeURL }} {{ int (mul $w_page 2) }}w,
             {{ $src_xlarge | safeURL }} {{ int (mul $w_page 3) }}w"
             {{- with .SrcMobile -}}
-            media="(min-width: 681px)" 
+            media="(min-width: 768px)" 
             {{- end -}} />
         {{- end -}}
         <img
             class="lazyload{{ with .Class }} {{ . }}{{ end }}"
             src="{{ $loading.RelPermalink }}"
-            {{ with .SrcMobile -}}data-src="{{ $src_mobile | safeURL }}"{{- else -}}data-src="{{ $src | safeURL }}"{{- end -}}
+            {{ with .SrcMobile -}}data-src="{{ $src_mobile | safeURL }}"{{- else -}}data-src="{{ $src_xlarge | safeURL }}"{{- end -}}
             {{ if $isformat }} data-sizes="auto", {{ end }}
             alt="{{ $alt }}"
             title="{{ .Title | default $alt }}"
