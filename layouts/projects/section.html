@@ -1,13 +1,18 @@
 {{- define "title" }}
-    {{- .Params.Title | default (T .Section) | default .Section | dict "Some" | T "allSome" }} - {{ .Site.Title -}}
+    {{- .Params.Title | default (T .Section) | default .Section | humanize -}}
 {{- end -}}
 
 {{- define "content" -}}
     <div class="page home" data-home="posts">
+        {{- $title := .Params.Title | default (T .Section) | default .Section | humanize -}}
         {{- /* Title */ -}}
         <h2 class="single-title animate__animated animate__pulse animate__faster">
-            {{- .Params.Title | default (T .Section) | default .Section | dict "Some" | T "allSome" -}}
+            {{- $title -}}
+            <!-- {{- .Params.Title | default (T .Section) | default .Section | dict "Some" | T "allSome" -}}  (add this again if you want to have e.g. 'All projects')-->
         </h2>
+        {{- if eq $title "Projects" -}}
+            <p>This page shows a selection of past or ongoing projects.</p>
+        {{- end -}}
         {{- /* Posts */ -}}
         {{- if .Site.RegularPages -}}
             {{- /* Paginate */ -}}
