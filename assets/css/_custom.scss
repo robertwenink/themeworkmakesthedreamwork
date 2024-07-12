@@ -23,42 +23,13 @@ div#expertises_table {
     }
 }
 
-.single .content .wrap-around {
-    display: inline-block;
-    width: 100%;
-    margin-bottom: 0.75rem;
-    img {
-        float: left;
-        margin: 0.5rem 2.5% 2.5% 0; //0.5rem is perfect de text spacing
-    }    
-    
-    p {
-        text-align: left;
-    }
-
-    ul {
-        overflow: auto;
-        padding-left: 1.5rem !important;
-        @media only screen and (min-width: 480px) {
-            margin-top: 0 !important;   //pakt de overlap met p niet helemaal vreemd genoeg.
-        }
-    }
-
-    a, div {
-        height: max-content;
-    }
-}
 
 img#python {
     margin-top: 0;
     width: 15%;
 }
 
-.single .content .wrap-around.skipheader img {
-    margin-top: 2.05rem;
-}
-
-@media only screen and (max-width: 680px) {
+@media only screen and (max-width: 767.8px) {
     #content {
         #about_image {
             width: 100% !important;
@@ -67,22 +38,14 @@ img#python {
 }
 
 // FRONTPAGE STYLING
-#my-name-is-before, #hire-text-before{
+#intro-text-before{
     display: none;
-}
-
-#img-container {
-    max-width: 47.5%;
-    width: 47.5%;
-    margin: 0.5rem 2.5% 2.5% 0;
-    float: left;
-    position: relative;
 }
 
 #pf_home {
     max-width: 100%;
     width: 100%;
-    height: 17rem;
+    height: 15rem;
     object-fit: cover;
     margin: 0;
 }
@@ -92,57 +55,27 @@ img#python {
     width: 100%;
   }
 
-@media only screen and (max-width: 780px) { // was 704
-    #my-name-is-after{
-        display: none;
-    }
-    #my-name-is-before{
-        display: block;
-    }
-    #pf_home {
-        height: 21vw;
-    }
+#intro-text-after{
+    margin: auto;
 }
 
-@media only screen and (max-width: 680px) { //was 590
-    #hire-text-after{
-        display: none;
-    }
-    #hire-text-before{
-        display: block;
-    }
-}
-
-@media only screen and (max-width: 680px) { // was 480
-    // set the text above or below
-    #hire-text-after{
-        display: none;
-    }
-    #hire-text-before{
-        display: block;
-    }
+@media only screen and (max-width: 767.8px) { // was 480
     // NOTE dit hieronder gecombineerd met de negatieve margin van pf_home geeft een effectieve css crop.
     #img-container {
         // height: 90vw;
         float: none;
         width: 100%;
-        height: 28.35vw;
+        height: 28.35vw;    // equal to the 'projects' banner size! 
         max-width: 100%;
         margin: 0;
     }
     #pf_home {
         max-width: 100%;
         width: 100%;
-        height: 28.35vw;
+        height: 28.35vw;    // equal to the 'projects' banner size! 
         object-fit: cover;
         object-position: 0% 0%; 
         margin: 0;
-    }
-
-    .wrap-around ul {
-        // padding-left: 2.5rem !important;
-        padding-left: 1.5rem !important;
-        // margin-top: 0.5rem !important;
     }
 }
 
@@ -175,14 +108,35 @@ svg.svg_icon {
     }
 }
 
-@media (max-width: 780px) {
+// 768px is the bootstrap md layout breakpoint
+@media (max-width: 767.8px) {
     .order-md-1,
     .order-md-2 {
         order: 0; /* Reset the order for mobile */
         margin-top: 1rem;
     }
+    // for the icons
     .col-md-3 {
         width: 35%;
+        max-width: 192px; // (800 - 32) / 4 (page width - img margin) * portion of col
+    }
+    .col-md-6 {
+        width: 100%;
+    }
+
+    #contact-me-text-side {
+        display: none;
+    }
+}
+
+@media (min-width: 768px) {
+    .single .content .custom-row-margins {
+        .order-md-1 {
+            padding-right: 0.5rem;
+        }
+        .order-md-2 {
+            padding-left: 0.5rem;
+        }
     }
 }
 

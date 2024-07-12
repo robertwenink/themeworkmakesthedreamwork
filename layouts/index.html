@@ -18,7 +18,7 @@
         {{- end -}}
         
         {{- /* Posts */ -}}
-        {{- if .Site.RegularPages -}}
+        <!-- {{- if .Site.RegularPages -}}
             {{- /* Paginate */ -}}
             {{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections -}}
             {{- if .Site.Params.page.hiddenFromHomePage -}}
@@ -33,7 +33,7 @@
                 {{- .Render "summary" -}}
             {{- end -}}
             {{- partial "paginator.html" . -}}
-        {{- end -}}
+        {{- end -}} -->
     </div>
     
     {{ with $params.showarchive }}

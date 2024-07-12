@@ -44,7 +44,7 @@ var Util = /*#__PURE__*/function () {
   }, {
     key: "isMobile",
     value: function isMobile() {
-      return window.matchMedia('only screen and (max-width: 680px)').matches;
+      return window.matchMedia('only screen and (max-width: 767.8px)').matches;
     }
   }, {
     key: "isTocStatic",
