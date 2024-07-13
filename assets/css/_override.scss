@@ -51,6 +51,13 @@
   }
 }
 
+.section-separator-light {
+  border-bottom: $global-hr-line $global-border-color;
+  [theme=dark] & {
+    border-bottom: $global-hr-line $global-border-color-dark;
+  }
+}
+
 .mermaid {
   position: relative;
   text-align: center;
