@@ -130,6 +130,9 @@
         }
       }
     }
+    div.no-header-mark h2 > .header-mark::before {
+      display: none;
+    }
 
     h3
     {
