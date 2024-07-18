@@ -1,6 +1,6 @@
 ---
 title: "{{ replace .TranslationBaseName "-" " " | title }}"
-subtitle: ""
+
 date: {{ .Date }}
 draft: true
 description: "" # important for proper SEO!!
