@@ -1,6 +1,6 @@
 <script>
     function onloadfinished(src) {
-        console.log(src, "library is loaded")
+        // console.log(src, "library is loaded")
     }
 </script>
 {{- with .Content -}}
@@ -16,7 +16,7 @@
             {{- with .Template -}}
                 {{- $resource = $resource | resources.ExecuteAsTemplate . $.Context -}}
             {{- end -}}
-            {{- if .Minify -}}
+            {{- if and hugo.IsProduction .Minify -}}
                 {{- $resource = $resource | minify -}}
             {{- end -}}
             {{- with .Fingerprint -}}
