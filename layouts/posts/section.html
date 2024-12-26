@@ -9,6 +9,7 @@
         // Get all the buttons and posts
         const buttons = document.querySelectorAll(".tag-buttons button");
         const posts = document.querySelectorAll(".archive-item.listed");
+        const headers = document.querySelectorAll("div:has(> h3.group-title)");
 
         // Add click event listener to each button
         buttons.forEach(function (button) {
@@ -28,6 +29,9 @@
                     posts.forEach(function (post) {
                         post.style.display = "flex";
                     });
+                    headers.forEach(function (header) {
+                        header.style.display = "block";
+                    });
                 } else {
                     const tag = button.textContent.trim();
 
@@ -35,13 +39,22 @@
                     posts.forEach(function (post) {
                         post.style.display = "none";
                     });
+                    headers.forEach((header) => {
+                        header.style.display = "none";
+                    });
 
                     // Show only posts with the selected tag
-                    const id_filter = "#" + tag.replace(" ","-").toLocaleLowerCase()
-                    console.log(id_filter)
-                    const filteredPosts = document.querySelectorAll(id_filter);
-                    filteredPosts.forEach(function (post) {
+                    const id_filter = tag.replace(" ","-").toLocaleLowerCase()
+                    
+                    const filteredPosts = document.querySelectorAll(`[data-id="${id_filter}"`);
+                    filteredPosts.forEach((post) => {
                         post.style.display = "flex";
+                    });
+
+                    const filteredHeaders = document.querySelectorAll(`[data-title-id*="${id_filter}"`);
+                    console.log(filteredHeaders)
+                    filteredHeaders.forEach((header) => {
+                        header.style.display = "block";
                     });
                 }
             });
@@ -113,9 +126,24 @@
                 {{- $pages = .Paginate $pages -}}
             {{- end -}}
             {{- range $pages.PageGroups -}}
-                <h3 class="group-title">{{ .Key }}</h3>
+                {{- $categoryList := slice -}} <!-- Initialize an empty list -->
+                
                 {{- range .Pages -}}
-                    <article class="archive-item listed" id="{{ range .Params.categories }}{{- lower ( urlize . ) -}}{{ end }}">
+                    {{- range .Params.categories -}}
+                        {{- $category := lower (urlize .) -}} <!-- Process category -->
+                        {{- if not (in $categoryList $category) -}}
+                            {{- $categoryList = $categoryList | append $category -}} <!-- Add to list -->
+                        {{- end -}}
+                    {{- end -}}
+                {{- end -}}
+                
+                <!-- Display group title with unique IDs -->
+                <div data-title-id="{{ delimit $categoryList " " }}">
+                    <h3 class="group-title">{{ .Key }}</h3>
+                </div>
+            
+                {{- range .Pages -}}
+                    <article class="archive-item listed" data-id="{{ range .Params.categories }}{{- lower ( urlize . ) -}}{{ end }}">
                         <a href="{{ .RelPermalink }}" class="archive-item-link">
                             {{- .Title | emojify -}}
                         </a>
