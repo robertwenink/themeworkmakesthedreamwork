@@ -575,8 +575,8 @@ class Theme {
           toc.style.top = `${TOP_SPACING}px`;
         }
   
-        tocLinkElements.forEach((tocLink) => tocLink.classList.remove('active'));
-        tocLiElements.forEach((tocLi) => tocLi.classList.remove('has-active'));
+        tocLinkElements.forEach((tocLink) => tocLink.classList.remove('active'));        
+        Array.from(tocLiElements).forEach((tocLi) => tocLi.classList.remove('has-active'));
   
         const INDEX_SPACING = 20 + (headerIsFixed ? headerHeight : 0);
         let activeTocIndex = headerLinkElements.length - 1;
