@@ -119,8 +119,8 @@ $code-font-family: "Source Code Pro", Menlo, Monaco, Consolas, "Liberation Mono"
 $code-font-size: .875rem !default;
 
 // Color of the code (these are the default colors, without chroma parsing)
-$code-color: #E74C3C !default;
-$code-color-dark: #E5BF78 !default;
+$code-color: $global-font-color !default;
+$code-color-dark: $global-font-color-dark !default;
 
 // Color of the code background
 $code-background-color-dark: #1F1F1F !default;
@@ -132,6 +132,8 @@ $code-info-color-dark: #b1b0b0 !default;
 // Code type list
 /*#region*/
 $code-type-list:
+  "language-text" "",
+  "language-plaintext" "",
   "language-bash" "Bash",
   "language-c" "C",
   "language-cs" "C#",
